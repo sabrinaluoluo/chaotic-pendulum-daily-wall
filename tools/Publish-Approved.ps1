@@ -66,9 +66,4 @@ if ($LASTEXITCODE -ne 1) {
 if ($LASTEXITCODE -ne 0) {
     throw "备用源 git commit 失败。"
 }
-& git -C $mirrorRoot push origin main
-if ($LASTEXITCODE -ne 0) {
-    throw "备用源 git push 失败。"
-}
-
-Write-Host "备用更新源已发布。"
+Write-Host "备用更新源内容已经提交，等待推送。"
