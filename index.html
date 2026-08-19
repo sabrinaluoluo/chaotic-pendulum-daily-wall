@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <title>CHAOTIC PENDULUM · 备用播放器</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #000; }
+      iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+      #night { position: fixed; inset: 0; z-index: 2; display: none; background: #000; }
+      body.closed iframe { visibility: hidden; }
+      body.closed #night { display: block; }
+    </style>
+  </head>
+  <body data-target-resolution="1280x960" data-scaling-policy="cover-no-stretch">
+    <iframe id="display" src="versions/default.html" title="混沌摆每日动态屏幕"></iframe>
+    <div id="night" aria-label="非播放时段"></div>
+    <script>
+      (() => {
+        const display = document.getElementById('display');
+        let activePath = 'versions/default.html';
+
+        function beijingParts() {
+          const parts = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'Asia/Shanghai',
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+          }).formatToParts(new Date());
+          return Object.fromEntries(parts.map((part) => [part.type, part.value]));
+        }
+
+        function updateHours() {
+          const parts = beijingParts();
+          const minutes = Number(parts.hour) * 60 + Number(parts.minute);
+          document.body.classList.toggle('closed', minutes < 570 || minutes >= 1320);
+        }
+
+        async function updateVersion() {
+          try {
+            const response = await fetch(`schedule.json?v=${Date.now()}`, { cache: 'no-store' });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const schedule = await response.json();
+            const parts = beijingParts();
+            const today = `${parts.year}-${parts.month}-${parts.day}`;
+            const approved = schedule.approvedDate === today && typeof schedule.versionPath === 'string';
+            const nextPath = approved
+              ? schedule.versionPath.replace(/^\/+/, '')
+              : String(schedule.fallbackPath || 'versions/default.html').replace(/^\/+/, '');
+            if (nextPath && nextPath !== activePath) {
+              activePath = nextPath;
+              display.src = `${nextPath}?v=${encodeURIComponent(schedule.updatedAt || Date.now())}`;
+            }
+          } catch {
+            if (activePath !== 'versions/default.html') {
+              activePath = 'versions/default.html';
+              display.src = activePath;
+            }
+          }
+        }
+
+        updateHours();
+        updateVersion();
+        setInterval(updateHours, 1000);
+        setInterval(updateVersion, 300000);
+      })();
+    </script>
+  </body>
+</html>
