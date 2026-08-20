@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#02050a" />
+    <meta name="description" content="混沌摆 2026 上弦月动态门口屏候选" />
+    <title>CHAOTIC PENDULUM · 上弦月候选</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        background: #000;
+        font-family: "Segoe UI Variable Text", "Microsoft YaHei UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #000;
+      }
+
+      body {
+        -webkit-font-smoothing: antialiased;
+        text-rendering: geometricPrecision;
+      }
+
+      .shell {
+        display: grid;
+        width: 100vw;
+        height: 100vh;
+        height: 100svh;
+        place-items: center;
+        overflow: hidden;
+        background: #000;
+      }
+
+      .stage {
+        position: relative;
+        isolation: isolate;
+        width: max(100vw, 133.333vh);
+        width: max(100vw, 133.333svh);
+        height: max(100vh, 75vw);
+        height: max(100svh, 75vw);
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        color: #edf3f8;
+        background: #02050a;
+        cursor: default;
+        user-select: none;
+      }
+
+      #scene,
+      .veil,
+      .screen-frame {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      #scene { z-index: 0; }
+
+      .veil {
+        z-index: 1;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 65% 46%, transparent 0 28%, rgb(1 4 10 / 8%) 58%, rgb(0 0 0 / 48%) 100%),
+          linear-gradient(90deg, rgb(0 0 0 / 40%), transparent 28% 73%, rgb(0 0 0 / 28%)),
+          linear-gradient(0deg, rgb(0 0 0 / 42%), transparent 23% 83%, rgb(0 0 0 / 18%));
+      }
+
+      .screen-frame {
+        z-index: 6;
+        pointer-events: none;
+        border: 2px solid rgb(255 255 255 / 3.5%);
+        box-shadow: inset 0 0 86px rgb(0 0 0 / 20%);
+      }
+
+      .brand,
+      .phase,
+      .environment,
+      .clock,
+      .science-note,
+      .disclosure {
+        position: absolute;
+        z-index: 3;
+      }
+
+      .brand {
+        top: 55px;
+        left: 60px;
+      }
+
+      .brand h1 {
+        margin: 0;
+        color: rgb(244 247 250 / 95%);
+        font-family: "Segoe UI Variable Display", "Helvetica Neue", Arial, sans-serif;
+        font-size: 38px;
+        font-weight: 270;
+        line-height: 1;
+        letter-spacing: 0.155em;
+        white-space: nowrap;
+        text-shadow: 0 0 34px rgb(139 180 226 / 11%);
+      }
+
+      .brand .company {
+        margin-top: 14px;
+        color: rgb(218 227 236 / 73%);
+        font-size: 13px;
+        font-weight: 390;
+        line-height: 1;
+        letter-spacing: 0.22em;
+      }
+
+      .brand .foundation {
+        margin-top: 14px;
+        color: rgb(119 139 164 / 64%);
+        font: 10px/1 "Cascadia Mono", Consolas, monospace;
+        letter-spacing: 0.17em;
+      }
+
+      .brand .foundation i {
+        color: #b6d9f4;
+        font-style: normal;
+      }
+
+      .phase {
+        top: 53px;
+        right: 60px;
+        text-align: right;
+      }
+
+      .phase .cn {
+        color: rgb(240 246 251 / 95%);
+        font-size: 30px;
+        font-weight: 315;
+        line-height: 1;
+        letter-spacing: 0.38em;
+        text-shadow: 0 0 30px rgb(149 198 239 / 18%);
+      }
+
+      .phase .en {
+        margin-top: 13px;
+        color: rgb(166 207 238 / 88%);
+        font: 10px/1 "Cascadia Mono", Consolas, monospace;
+        letter-spacing: 0.25em;
+      }
+
+      .phase .lunar {
+        margin-top: 13px;
+        color: rgb(157 175 196 / 67%);
+        font-size: 11px;
+        font-weight: 390;
+        letter-spacing: 0.18em;
+      }
+
+      .phase .rule {
+        width: 142px;
+        height: 1px;
+        margin: 16px 0 0 auto;
+        background: linear-gradient(90deg, transparent, rgb(163 207 238 / 72%));
+      }
+
+      .science-note {
+        top: 166px;
+        right: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        color: rgb(110 135 163 / 58%);
+        font: 9px/1 "Cascadia Mono", Consolas, monospace;
+        letter-spacing: 0.16em;
+      }
+
+      .science-note strong {
+        color: rgb(177 211 237 / 80%);
+        font-size: 10px;
+        font-weight: 500;
+      }
+
+      .environment {
+        bottom: 52px;
+        left: 60px;
+        width: 525px;
+      }
+
+      .location {
+        display: flex;
+        align-items: baseline;
+        gap: 13px;
+        color: rgb(121 142 168 / 72%);
+        font-size: 10px;
+        line-height: 1;
+        letter-spacing: 0.18em;
+      }
+
+      .location b {
+        color: rgb(224 232 239 / 86%);
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+      }
+
+      .location .sync {
+        padding-left: 13px;
+        border-left: 1px solid rgb(163 207 238 / 31%);
+        color: rgb(100 123 149 / 58%);
+        font: 9px/1 "Cascadia Mono", Consolas, monospace;
+        letter-spacing: 0.12em;
+      }
+
+      .weather {
+        display: flex;
+        align-items: baseline;
+        gap: 17px;
+        margin-top: 15px;
+      }
+
+      .temperature {
+        color: rgb(239 244 248 / 95%);
+        font-size: 55px;
+        font-weight: 230;
+        font-variant-numeric: tabular-nums;
+        line-height: 0.88;
+        letter-spacing: -0.06em;
+        text-shadow: 0 0 34px rgb(139 180 226 / 10%);
+      }
+
+      .weather-name {
+        color: rgb(168 210 239 / 89%);
+        font-size: 16px;
+        font-weight: 430;
+        letter-spacing: 0.16em;
+      }
+
+      .environment-data {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 16px;
+        color: rgb(133 153 179 / 78%);
+        font: 10px/1 "Cascadia Mono", "Microsoft YaHei UI", monospace;
+        letter-spacing: 0.1em;
+      }
+
+      .environment-data span + span {
+        padding-left: 16px;
+        border-left: 1px solid rgb(255 255 255 / 11%);
+      }
+
+      .clock {
+        right: 60px;
+        bottom: 49px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .date-line {
+        margin-right: 5px;
+        color: rgb(149 169 193 / 82%);
+        font-size: 15px;
+        font-weight: 380;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        letter-spacing: 0.18em;
+      }
+
+      .time-line {
+        display: flex;
+        align-items: baseline;
+        margin-top: 15px;
+        color: rgb(240 245 249 / 96%);
+        font-family: "Segoe UI Variable Display", "Helvetica Neue", sans-serif;
+        font-size: 92px;
+        font-weight: 210;
+        font-variant-numeric: tabular-nums lining-nums;
+        line-height: 0.82;
+        letter-spacing: -0.075em;
+        text-shadow: 0 0 40px rgb(126 177 219 / 11%);
+      }
+
+      .seconds {
+        width: 2.3em;
+        margin-left: 0.65em;
+        color: rgb(156 205 239 / 90%);
+        font: 14px/1 "Cascadia Mono", Consolas, monospace;
+        letter-spacing: 0.1em;
+      }
+
+      .timezone {
+        margin-top: 17px;
+        color: rgb(99 123 151 / 62%);
+        font: 9px/1 "Cascadia Mono", Consolas, monospace;
+        letter-spacing: 0.2em;
+      }
+
+      .disclosure {
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        color: rgb(101 121 145 / 46%);
+        font-size: 9px;
+        letter-spacing: 0.14em;
+        white-space: nowrap;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .stage { scroll-behavior: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section
+        class="stage"
+        data-target-resolution="1280x960"
+        data-scaling-policy="cover-no-stretch"
+        data-candidate="first-quarter-2026-08-20"
+        data-render-profile="balanced-30fps"
+        aria-label="混沌摆上弦月动态门口显示屏"
+        ondblclick="document.documentElement.requestFullscreen?.()"
+      >
+        <canvas id="scene" aria-hidden="true"></canvas>
+        <div class="veil" aria-hidden="true"></div>
+        <div class="screen-frame" aria-hidden="true"></div>
+
+        <header class="brand">
+          <h1>CHAOTIC PENDULUM</h1>
+          <div class="company">混沌摆（深圳）科技有限公司</div>
+          <div class="foundation">FOUNDED 2026.04.14 <i>·</i> DAY 0129</div>
+        </header>
+
+        <section class="phase" aria-label="2026年8月20日上弦月">
+          <div class="cn">上弦月</div>
+          <div class="en">FIRST QUARTER · 10:46 CST</div>
+          <div class="lunar">丙午年 · 七月初八</div>
+          <div class="rule"></div>
+        </section>
+
+        <div class="science-note" aria-hidden="true">
+          <strong>日月黄经差 · 90°</strong>
+          <span>暗月 → 蛾眉月 → 上弦</span>
+          <span>DATA · NAOJ / NASA SKYCAL</span>
+        </div>
+
+        <section class="environment" aria-label="深圳天气、农历和空气质量">
+          <div class="location">
+            <b>深圳</b>
+            <span>SHENZHEN · NANSHAN</span>
+            <span class="sync" id="sync">UPDATED --:--</span>
+          </div>
+          <div class="weather">
+            <span class="temperature" id="temperature">--°C</span>
+            <span class="weather-name" id="weather">气象同步中</span>
+          </div>
+          <div class="environment-data">
+            <span>农历 七月初八 · 上弦</span>
+            <span id="aqi">AQI --</span>
+            <span id="pm25">PM2.5 --</span>
+          </div>
+        </section>
+
+        <section class="clock" aria-label="北京时间">
+          <div class="date-line" id="date">2026.08.20 星期四</div>
+          <time class="time-line" id="time" datetime="2026-08-20T00:00:00+08:00">
+            <span id="hm">--:--</span><span class="seconds" id="seconds">--</span>
+          </time>
+          <div class="timezone">BEIJING TIME · UTC+8</div>
+        </section>
+
+        <div class="disclosure">原创天文编辑视觉 · 非新闻现场照片</div>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        "use strict";
+
+        const canvas = document.querySelector("#scene");
+        const ctx = canvas.getContext("2d", { alpha: false, desynchronized: true });
+        const stage = document.querySelector(".stage");
+        const TAU = Math.PI * 2;
+        const targetFrameMs = 1000 / 30;
+        let width = 1280;
+        let height = 960;
+        let dpr = 1;
+        let start = performance.now();
+        let previousPhysics = start;
+        let previousPaint = 0;
+        let accumulator = 0;
+
+        const rand = (() => {
+          let seed = 0x2082026;
+          return () => {
+            seed = (seed * 1664525 + 1013904223) >>> 0;
+            return seed / 4294967296;
+          };
+        })();
+
+        const stars = Array.from({ length: 390 }, (_, index) => ({
+          x: rand(),
+          y: rand(),
+          depth: index < 240 ? 0 : index < 340 ? 1 : 2,
+          size: 0.35 + rand() * (index > 340 ? 1.25 : 0.7),
+          alpha: 0.12 + rand() * (index > 340 ? 0.62 : 0.34),
+          phase: rand() * TAU,
+          cool: rand() > 0.18,
+        }));
+
+        const lunarDust = Array.from({ length: 320 }, () => ({
+          angle: rand() * TAU,
+          radius: 0.35 + rand() * 0.65,
+          size: 0.25 + rand() * 1.25,
+          alpha: 0.025 + rand() * 0.12,
+          phase: rand() * TAU,
+        }));
+
+        const craters = Array.from({ length: 28 }, () => ({
+          x: rand() * 0.82 - 0.04,
+          y: rand() * 1.56 - 0.78,
+          r: 0.018 + rand() * 0.065,
+          alpha: 0.08 + rand() * 0.18,
+        }));
+
+        const trail = [];
+        const state = { a1: 1.91, v1: 0, a2: -0.96, v2: 0 };
+        const physics = { g: 9.81, m1: 1.1, m2: 0.92, l1: 1, l2: 0.91 };
+
+        function derivative(s) {
+          const { g, m1, m2, l1, l2 } = physics;
+          const delta = s.a1 - s.a2;
+          const denominator = 2 * m1 + m2 - m2 * Math.cos(2 * delta);
+          const a1acc = (
+            -g * (2 * m1 + m2) * Math.sin(s.a1)
+            - m2 * g * Math.sin(s.a1 - 2 * s.a2)
+            - 2 * Math.sin(delta) * m2 * (
+              s.v2 * s.v2 * l2 + s.v1 * s.v1 * l1 * Math.cos(delta)
+            )
+          ) / (l1 * denominator);
+          const a2acc = (
+            2 * Math.sin(delta) * (
+              s.v1 * s.v1 * l1 * (m1 + m2)
+              + g * (m1 + m2) * Math.cos(s.a1)
+              + s.v2 * s.v2 * l2 * m2 * Math.cos(delta)
+            )
+          ) / (l2 * denominator);
+          return { a1: s.v1, v1: a1acc, a2: s.v2, v2: a2acc };
+        }
+
+        function offset(s, k, factor) {
+          return {
+            a1: s.a1 + k.a1 * factor,
+            v1: s.v1 + k.v1 * factor,
+            a2: s.a2 + k.a2 * factor,
+            v2: s.v2 + k.v2 * factor,
+          };
+        }
+
+        function integrate(dt) {
+          const k1 = derivative(state);
+          const k2 = derivative(offset(state, k1, dt / 2));
+          const k3 = derivative(offset(state, k2, dt / 2));
+          const k4 = derivative(offset(state, k3, dt));
+          for (const key of ["a1", "v1", "a2", "v2"]) {
+            state[key] += (dt / 6) * (k1[key] + 2 * k2[key] + 2 * k3[key] + k4[key]);
+          }
+          if (![state.a1, state.v1, state.a2, state.v2].every(Number.isFinite)) {
+            Object.assign(state, { a1: 1.91, v1: 0, a2: -0.96, v2: 0 });
+            trail.length = 0;
+          }
+        }
+
+        function fitCanvas() {
+          const box = stage.getBoundingClientRect();
+          width = box.width;
+          height = box.height;
+          dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+          canvas.width = Math.round(width * dpr);
+          canvas.height = Math.round(height * dpr);
+          canvas.style.width = `${width}px`;
+          canvas.style.height = `${height}px`;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        function glow(x, y, radius, core, halo, strength = 1) {
+          const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius * 4.6);
+          gradient.addColorStop(0, core);
+          gradient.addColorStop(0.18, core);
+          gradient.addColorStop(0.48, halo);
+          gradient.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.globalAlpha = strength;
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(x, y, radius * 4.6, 0, TAU);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+
+        function drawBackground(t) {
+          const base = ctx.createRadialGradient(width * 0.65, height * 0.46, 0, width * 0.65, height * 0.46, width * 0.78);
+          base.addColorStop(0, "#0c1826");
+          base.addColorStop(0.34, "#07101a");
+          base.addColorStop(0.72, "#03070d");
+          base.addColorStop(1, "#010204");
+          ctx.fillStyle = base;
+          ctx.fillRect(0, 0, width, height);
+
+          const fieldX = width * 0.675;
+          const fieldY = height * 0.49;
+          const fieldR = Math.min(width, height) * 0.43;
+          ctx.save();
+          ctx.globalCompositeOperation = "screen";
+          const lunarField = ctx.createRadialGradient(
+            fieldX + fieldR * 0.22,
+            fieldY - fieldR * 0.16,
+            fieldR * 0.05,
+            fieldX,
+            fieldY,
+            fieldR,
+          );
+          lunarField.addColorStop(0, "rgba(164,203,232,0.075)");
+          lunarField.addColorStop(0.55, "rgba(99,148,190,0.028)");
+          lunarField.addColorStop(0.92, "rgba(116,166,204,0.012)");
+          lunarField.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = lunarField;
+          ctx.beginPath();
+          ctx.arc(fieldX, fieldY, fieldR, 0, TAU);
+          ctx.fill();
+
+          ctx.strokeStyle = "rgba(154,199,231,0.075)";
+          ctx.lineWidth = 1;
+          for (let i = 0; i < 4; i += 1) {
+            ctx.beginPath();
+            ctx.arc(fieldX, fieldY, fieldR * (0.47 + i * 0.13), -1.06, 1.08);
+            ctx.stroke();
+          }
+
+          for (const dust of lunarDust) {
+            const drift = Math.sin(t * 0.000045 + dust.phase) * 0.018;
+            const radius = fieldR * (dust.radius + drift);
+            const x = fieldX + Math.cos(dust.angle + t * 0.000006) * radius;
+            const y = fieldY + Math.sin(dust.angle + t * 0.000006) * radius * 0.72;
+            ctx.fillStyle = `rgba(180,212,235,${dust.alpha * (0.72 + Math.sin(t * 0.00035 + dust.phase) * 0.28)})`;
+            ctx.beginPath();
+            ctx.arc(x, y, dust.size, 0, TAU);
+            ctx.fill();
+          }
+
+          for (const star of stars) {
+            const speed = [0.0000007, 0.0000014, 0.0000024][star.depth];
+            const x = ((star.x + t * speed) % 1) * width;
+            const y = ((star.y + t * speed * 0.12) % 1) * height;
+            const pulse = 0.72 + Math.sin(t * 0.00048 + star.phase) * 0.28;
+            const color = star.cool ? "185,216,238" : "235,218,193";
+            ctx.fillStyle = `rgba(${color},${star.alpha * pulse})`;
+            ctx.beginPath();
+            ctx.arc(x, y, star.size * (0.82 + star.depth * 0.13), 0, TAU);
+            ctx.fill();
+            if (star.depth === 2 && star.size > 1.15 && star.alpha > 0.55) {
+              ctx.strokeStyle = `rgba(${color},${star.alpha * pulse * 0.2})`;
+              ctx.lineWidth = 0.6;
+              ctx.beginPath();
+              ctx.moveTo(x - star.size * 3.2, y);
+              ctx.lineTo(x + star.size * 3.2, y);
+              ctx.moveTo(x, y - star.size * 3.2);
+              ctx.lineTo(x, y + star.size * 3.2);
+              ctx.stroke();
+            }
+          }
+          ctx.restore();
+
+          const terminator = ctx.createLinearGradient(width * 0.42, 0, width * 0.82, 0);
+          terminator.addColorStop(0, "rgba(0,0,0,0)");
+          terminator.addColorStop(0.46, "rgba(1,4,9,0.05)");
+          terminator.addColorStop(0.5, "rgba(150,197,231,0.035)");
+          terminator.addColorStop(0.54, "rgba(1,4,9,0.08)");
+          terminator.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = terminator;
+          ctx.fillRect(width * 0.34, height * 0.16, width * 0.58, height * 0.65);
+        }
+
+        function pendulumPoints() {
+          const scale = Math.min(width / 1280, height / 960);
+          const anchor = { x: width * 0.615, y: height * 0.305 };
+          const l1 = 176 * scale;
+          const l2 = 194 * scale;
+          const joint = {
+            x: anchor.x + Math.sin(state.a1) * l1,
+            y: anchor.y + Math.cos(state.a1) * l1,
+          };
+          const end = {
+            x: joint.x + Math.sin(state.a2) * l2,
+            y: joint.y + Math.cos(state.a2) * l2,
+          };
+          return { anchor, joint, end, scale };
+        }
+
+        function drawArm(a, b, intensity = 1) {
+          const gradient = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+          gradient.addColorStop(0, `rgba(105,148,183,${0.3 * intensity})`);
+          gradient.addColorStop(0.52, `rgba(222,236,246,${0.72 * intensity})`);
+          gradient.addColorStop(1, `rgba(133,181,216,${0.42 * intensity})`);
+          ctx.save();
+          ctx.globalCompositeOperation = "screen";
+          ctx.strokeStyle = gradient;
+          ctx.lineWidth = 1.4;
+          ctx.shadowColor = "rgba(139,190,225,0.3)";
+          ctx.shadowBlur = 11;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = "rgba(229,240,247,0.15)";
+          ctx.lineWidth = 0.55;
+          ctx.beginPath();
+          ctx.moveTo(a.x + 2, a.y - 1);
+          ctx.lineTo(b.x + 2, b.y - 1);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        function drawNewMoon(point, radius) {
+          ctx.save();
+          glow(point.x, point.y, radius * 0.72, "rgba(93,137,170,0.16)", "rgba(82,135,178,0.035)", 0.9);
+          const disc = ctx.createRadialGradient(
+            point.x - radius * 0.2,
+            point.y - radius * 0.25,
+            radius * 0.05,
+            point.x,
+            point.y,
+            radius,
+          );
+          disc.addColorStop(0, "rgba(16,28,40,0.96)");
+          disc.addColorStop(0.7, "rgba(4,10,17,0.99)");
+          disc.addColorStop(1, "rgba(1,4,8,1)");
+          ctx.fillStyle = disc;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, radius, 0, TAU);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(173,210,236,0.42)";
+          ctx.lineWidth = 1.15;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, radius + 0.5, -1.28, 1.28);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        function drawCrescent(point, radius) {
+          ctx.save();
+          glow(point.x, point.y, radius * 0.9, "rgba(204,228,243,0.42)", "rgba(98,167,215,0.07)", 0.82);
+          ctx.fillStyle = "rgba(215,231,241,0.82)";
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, radius, 0, TAU);
+          ctx.fill();
+          const shadow = ctx.createRadialGradient(
+            point.x - radius * 0.42,
+            point.y,
+            radius * 0.08,
+            point.x - radius * 0.3,
+            point.y,
+            radius,
+          );
+          shadow.addColorStop(0, "rgba(4,9,16,1)");
+          shadow.addColorStop(0.78, "rgba(5,11,18,0.99)");
+          shadow.addColorStop(1, "rgba(13,27,40,0.91)");
+          ctx.fillStyle = shadow;
+          ctx.beginPath();
+          ctx.arc(point.x - radius * 0.3, point.y, radius * 0.98, 0, TAU);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(214,233,245,0.56)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, radius, -1.18, 1.18);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        function drawQuarterMoon(point, radius, t) {
+          ctx.save();
+          glow(point.x, point.y, radius * 0.83, "rgba(222,237,247,0.35)", "rgba(105,170,216,0.075)", 0.95);
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, radius, 0, TAU);
+          ctx.clip();
+
+          const surface = ctx.createRadialGradient(
+            point.x + radius * 0.38,
+            point.y - radius * 0.38,
+            radius * 0.03,
+            point.x,
+            point.y,
+            radius * 1.2,
+          );
+          surface.addColorStop(0, "#f0f5f7");
+          surface.addColorStop(0.42, "#c7d4dc");
+          surface.addColorStop(0.78, "#8197a8");
+          surface.addColorStop(1, "#425466");
+          ctx.fillStyle = surface;
+          ctx.fillRect(point.x - radius, point.y - radius, radius * 2, radius * 2);
+
+          for (const crater of craters) {
+            const cx = point.x + crater.x * radius;
+            const cy = point.y + crater.y * radius;
+            const cr = crater.r * radius;
+            const craterGradient = ctx.createRadialGradient(cx - cr * 0.3, cy - cr * 0.3, 0, cx, cy, cr);
+            craterGradient.addColorStop(0, `rgba(238,245,248,${crater.alpha * 0.48})`);
+            craterGradient.addColorStop(0.52, `rgba(82,103,119,${crater.alpha})`);
+            craterGradient.addColorStop(1, "rgba(28,42,54,0)");
+            ctx.fillStyle = craterGradient;
+            ctx.beginPath();
+            ctx.arc(cx, cy, cr, 0, TAU);
+            ctx.fill();
+          }
+
+          const boundaryDrift = Math.sin(t * 0.00022) * radius * 0.012;
+          const shadow = ctx.createLinearGradient(point.x - radius, 0, point.x + radius, 0);
+          shadow.addColorStop(0, "rgba(1,4,8,0.995)");
+          shadow.addColorStop(0.47, "rgba(3,8,14,0.99)");
+          shadow.addColorStop(0.498, "rgba(21,38,52,0.8)");
+          shadow.addColorStop(0.515, "rgba(0,0,0,0.06)");
+          shadow.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.save();
+          ctx.translate(boundaryDrift, 0);
+          ctx.fillStyle = shadow;
+          ctx.fillRect(point.x - radius, point.y - radius, radius * 2, radius * 2);
+          ctx.restore();
+
+          ctx.restore();
+          ctx.save();
+          ctx.strokeStyle = "rgba(221,238,248,0.78)";
+          ctx.lineWidth = 1.15;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, radius, -1.5, 1.5);
+          ctx.stroke();
+          ctx.strokeStyle = "rgba(97,145,180,0.26)";
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, radius, 1.5, 4.78);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        function drawTrail(t) {
+          if (trail.length < 2) return;
+          ctx.save();
+          ctx.globalCompositeOperation = "screen";
+          for (let i = 1; i < trail.length; i += 1) {
+            const age = (t - trail[i].time) / 2200;
+            const alpha = Math.max(0, (1 - age) * 0.052);
+            ctx.strokeStyle = `rgba(127,184,222,${alpha})`;
+            ctx.lineWidth = 0.65;
+            ctx.beginPath();
+            ctx.moveTo(trail[i - 1].x, trail[i - 1].y);
+            ctx.lineTo(trail[i].x, trail[i].y);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+
+        function drawPendulum(t) {
+          const { anchor, joint, end, scale } = pendulumPoints();
+          trail.push({ x: end.x, y: end.y, time: t });
+          while (trail.length > 90 || (trail[0] && t - trail[0].time > 2200)) trail.shift();
+          drawTrail(t);
+          drawArm(anchor, joint, 0.9);
+          drawArm(joint, end, 1);
+          drawNewMoon(anchor, 18 * scale);
+          drawCrescent(joint, 30 * scale);
+          drawQuarterMoon(end, 82 * scale, t);
+
+          const pulse = (Math.sin(t * 0.00062) + 1) * 0.5;
+          if (pulse > 0.94) {
+            const p = (pulse - 0.94) / 0.06;
+            ctx.strokeStyle = `rgba(159,205,235,${(1 - p) * 0.13})`;
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.arc(end.x, end.y, (90 + p * 50) * scale, 0, TAU);
+            ctx.stroke();
+          }
+        }
+
+        function draw(t) {
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          drawBackground(t);
+          drawPendulum(t);
+        }
+
+        function frame(now) {
+          const physicsElapsed = Math.min((now - previousPhysics) / 1000, 0.08);
+          previousPhysics = now;
+          accumulator += physicsElapsed * 0.62;
+          const step = 1 / 240;
+          while (accumulator >= step) {
+            integrate(step);
+            accumulator -= step;
+          }
+
+          if (now - previousPaint >= targetFrameMs) {
+            previousPaint = now - ((now - previousPaint) % targetFrameMs);
+            draw(now - start);
+          }
+          requestAnimationFrame(frame);
+        }
+
+        function updateClock() {
+          const now = new Date();
+          const parts = new Intl.DateTimeFormat("zh-CN", {
+            timeZone: "Asia/Shanghai",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            weekday: "long",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          }).formatToParts(now);
+          const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+          document.querySelector("#date").textContent = `${values.year}.${values.month}.${values.day} ${values.weekday}`;
+          document.querySelector("#hm").textContent = `${values.hour}:${values.minute}`;
+          document.querySelector("#seconds").textContent = values.second;
+          document.querySelector("#time").dateTime = now.toISOString();
+        }
+
+        const weatherCodes = {
+          0: "晴", 1: "晴间多云", 2: "多云", 3: "阴",
+          45: "有雾", 48: "雾凇", 51: "细雨", 53: "小雨", 55: "细雨",
+          61: "小雨", 63: "中雨", 65: "大雨", 80: "阵雨", 81: "阵雨", 82: "强阵雨",
+          95: "雷阵雨", 96: "雷阵雨", 99: "强雷阵雨",
+        };
+
+        function aqiLabel(value) {
+          if (!Number.isFinite(value)) return "";
+          if (value <= 50) return "优";
+          if (value <= 100) return "良";
+          if (value <= 150) return "轻度";
+          if (value <= 200) return "中度";
+          return "较差";
+        }
+
+        async function updateEnvironment() {
+          try {
+            const [weatherResponse, airResponse] = await Promise.all([
+              fetch("https://api.open-meteo.com/v1/forecast?latitude=22.5431&longitude=114.0579&current=temperature_2m,weather_code&timezone=Asia%2FShanghai", { cache: "no-store" }),
+              fetch("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=22.5431&longitude=114.0579&current=us_aqi,pm2_5&timezone=Asia%2FShanghai", { cache: "no-store" }),
+            ]);
+            if (!weatherResponse.ok || !airResponse.ok) throw new Error("environment unavailable");
+            const weather = await weatherResponse.json();
+            const air = await airResponse.json();
+            const temperature = Math.round(weather.current.temperature_2m);
+            const aqi = Math.round(air.current.us_aqi);
+            const pm25 = Math.round(air.current.pm2_5);
+            document.querySelector("#temperature").textContent = `${temperature}°C`;
+            document.querySelector("#weather").textContent = weatherCodes[weather.current.weather_code] || "天气变化";
+            document.querySelector("#aqi").textContent = `AQI ${aqi} · ${aqiLabel(aqi)}`;
+            document.querySelector("#pm25").textContent = `PM2.5 ${pm25}`;
+            const sync = new Intl.DateTimeFormat("zh-CN", {
+              timeZone: "Asia/Shanghai",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false,
+            }).format(new Date());
+            document.querySelector("#sync").textContent = `UPDATED ${sync}`;
+          } catch {
+            document.querySelector("#sync").textContent = "LIVE DATA OFFLINE";
+          }
+        }
+
+        fitCanvas();
+        new ResizeObserver(fitCanvas).observe(stage);
+        updateClock();
+        updateEnvironment();
+        setInterval(updateClock, 1000);
+        setInterval(updateEnvironment, 30 * 60 * 1000);
+        requestAnimationFrame(frame);
+      })();
+    </script>
+  </body>
+</html>
+
