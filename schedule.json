@@ -1,10 +1,10 @@
 {
   "timezone": "Asia/Shanghai",
-  "approvedDate": "2026-08-21",
-  "versionPath": "/versions/2026-08-21-black-myth-zhong-kui.html",
+  "approvedDate": "2026-08-22",
+  "versionPath": "/versions/2026-08-22-world-humanoid-robot-games.html",
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-08-20T21:39:37+08:00",
+  "updatedAt": "2026-08-22T00:39:08+08:00",
   "refreshSeconds": 300
 }
