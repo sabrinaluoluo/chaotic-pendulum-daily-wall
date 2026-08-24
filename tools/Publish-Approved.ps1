@@ -42,6 +42,28 @@ if (
     throw "批准版本没有通过 1280×960 完整性检查。"
 }
 
+$scheduledVersions = @($schedule.scheduledVersions)
+foreach ($scheduled in $scheduledVersions) {
+    $scheduledDate = [string]$scheduled.date
+    $scheduledPath = [string]$scheduled.versionPath
+    if ($scheduledDate -notmatch '^\d{4}-\d{2}-\d{2}$' -or [string]::IsNullOrWhiteSpace($scheduledPath)) {
+        throw "预约版本字段不合法。"
+    }
+    $scheduledRelative = $scheduledPath.TrimStart('/')
+    $scheduledSource = Join-Path $sourceRoot $scheduledRelative
+    if (-not (Test-Path -LiteralPath $scheduledSource)) {
+        throw "预约版本文件不存在：$scheduledRelative"
+    }
+    $scheduledText = Get-Content -LiteralPath $scheduledSource -Raw -Encoding UTF8
+    if (
+        $scheduledText.Length -lt 10000 -or
+        $scheduledText -notmatch 'data-target-resolution="1280x960"' -or
+        $scheduledText -match '(?is)sorry.{0,120}blocked|you have been blocked|cf-error-details'
+    ) {
+        throw "预约版本没有通过 1280×960 完整性检查：$scheduledRelative"
+    }
+}
+
 New-Item -ItemType Directory -Path $targetVersions -Force | Out-Null
 Copy-Item -LiteralPath $sourceSchedule -Destination $targetSchedule -Force
 Get-ChildItem -LiteralPath $sourceVersions -File -Filter "*.html" | ForEach-Object {

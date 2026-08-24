@@ -44,19 +44,25 @@
             const schedule = await response.json();
             const parts = beijingParts();
             const today = `${parts.year}-${parts.month}-${parts.day}`;
-            const approved = schedule.approvedDate === today && typeof schedule.versionPath === 'string';
-            const nextPath = approved
-              ? schedule.versionPath.replace(/^\/+/, '')
+            const scheduled = Array.isArray(schedule.scheduledVersions)
+              ? schedule.scheduledVersions.find((candidate) => (
+                  candidate && candidate.date === today && typeof candidate.versionPath === 'string'
+                ))
+              : null;
+            const approved = schedule.approvedDate === today && typeof schedule.versionPath === 'string'
+              ? { versionPath: schedule.versionPath, updatedAt: schedule.updatedAt }
+              : null;
+            const selected = scheduled || approved;
+            const nextPath = selected
+              ? selected.versionPath.replace(/^\/+/, '')
               : String(schedule.fallbackPath || 'versions/default.html').replace(/^\/+/, '');
             if (nextPath && nextPath !== activePath) {
               activePath = nextPath;
-              display.src = `${nextPath}?v=${encodeURIComponent(schedule.updatedAt || Date.now())}`;
+              display.src = `${nextPath}?v=${encodeURIComponent(selected?.updatedAt || schedule.updatedAt || Date.now())}`;
             }
           } catch {
-            if (activePath !== 'versions/default.html') {
-              activePath = 'versions/default.html';
-              display.src = activePath;
-            }
+            // Keep the last successfully loaded version. Only the initial boot
+            // uses default.html when no valid schedule has ever been received.
           }
         }
 
