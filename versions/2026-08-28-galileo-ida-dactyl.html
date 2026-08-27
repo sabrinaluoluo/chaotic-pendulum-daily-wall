@@ -331,7 +331,7 @@
         class="stage"
         data-target-resolution="1280x960"
         data-scaling-policy="cover-no-stretch"
-        data-candidate="galileo-ida-dactyl-test-2026-08-27"
+        data-candidate="galileo-ida-dactyl-2026-08-28"
         data-render-profile="balanced-30fps-dpr1"
         data-animation-loops="1"
         data-physics-hz="120"
@@ -350,7 +350,7 @@
         <header class="brand">
           <h1>CHAOTIC PENDULUM</h1>
           <div class="company">混沌摆（深圳）科技有限公司</div>
-          <div class="foundation">FOUNDED 2026.04.14 <i>·</i> DAY 0136</div>
+          <div class="foundation">FOUNDED 2026.04.14 <i>·</i> DAY 0137</div>
         </header>
 
         <section class="story" aria-label="小行星卫星达克堤尔">
@@ -376,15 +376,15 @@
             <span class="weather-name" id="weather">多云</span>
           </div>
           <div class="environment-data">
-            <span>农历 七月十五</span>
+            <span>农历 七月十六</span>
             <span id="aqi">AQI 50 · 优</span>
             <span id="pm25">PM2.5 20</span>
           </div>
         </section>
 
         <section class="clock" aria-label="北京时间">
-          <div class="date-line" id="date">2026.08.27 星期四</div>
-          <time class="time-line" id="time" datetime="2026-08-27T09:00:00+08:00">
+          <div class="date-line" id="date">2026.08.28 星期五</div>
+          <time class="time-line" id="time" datetime="2026-08-28T09:00:00+08:00">
             <span id="hm">09:00</span><span class="seconds" id="seconds">00</span>
           </time>
           <div class="timezone">BEIJING TIME · UTC+8</div>
@@ -847,7 +847,7 @@
           }).formatToParts(now);
           const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
           document.querySelector("#date").textContent = previewMode
-            ? "2026.08.27 星期四"
+            ? "2026.08.28 星期五"
             : `${values.year}.${values.month}.${values.day} ${values.weekday}`;
           document.querySelector("#hm").textContent = previewMode ? "09:00" : `${values.hour}:${values.minute}`;
           document.querySelector("#seconds").textContent = previewMode ? "00" : values.second;
