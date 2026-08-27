@@ -1,11 +1,11 @@
 {
   "timezone": "Asia/Shanghai",
   "approvedDate": "2026-08-27",
-  "versionPath": "/versions/2026-08-27-world-rps-day.html",
+  "versionPath": "/versions/2026-08-27-galileo-ida-dactyl.html",
   "scheduledVersions": [],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-08-26T22:32:02+08:00",
+  "updatedAt": "2026-08-27T20:18:35+08:00",
   "refreshSeconds": 300
 }
