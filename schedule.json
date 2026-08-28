@@ -12,11 +12,16 @@
       "date": "2026-08-30",
       "versionPath": "/versions/2026-08-29-international-bat-night.html",
       "updatedAt": "2026-08-28T17:09:17+08:00"
+    },
+    {
+      "date": "2026-08-31",
+      "versionPath": "/versions/2026-08-31-pink-bubble-colleague-cinematic-kiss.html",
+      "updatedAt": "2026-08-28T21:55:11+08:00"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-08-28T17:09:17+08:00",
+  "updatedAt": "2026-08-28T21:55:11+08:00",
   "refreshSeconds": 300
 }
