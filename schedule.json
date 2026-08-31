@@ -2,10 +2,16 @@
   "timezone": "Asia/Shanghai",
   "approvedDate": "2026-08-31",
   "versionPath": "/versions/2026-08-31-pink-bubble-colleague-cinematic-kiss.html",
-  "scheduledVersions": [],
+  "scheduledVersions": [
+    {
+      "date": "2026-09-01",
+      "versionPath": "/versions/2026-09-01-new-school-year.html",
+      "updatedAt": "2026-08-31T11:52:20+08:00"
+    }
+  ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-08-30T22:31:17+08:00",
+  "updatedAt": "2026-08-31T11:52:20+08:00",
   "refreshSeconds": 300
 }
