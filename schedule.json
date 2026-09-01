@@ -2,10 +2,16 @@
   "timezone": "Asia/Shanghai",
   "approvedDate": "2026-09-01",
   "versionPath": "/versions/2026-09-01-new-school-year.html",
-  "scheduledVersions": [],
+  "scheduledVersions": [
+    {
+      "date": "2026-09-02",
+      "versionPath": "/versions/2026-09-02-world-coconut-day.html",
+      "updatedAt": "2026-09-01T11:53:02+08:00"
+    }
+  ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-08-31T22:31:32+08:00",
+  "updatedAt": "2026-09-01T11:53:02+08:00",
   "refreshSeconds": 300
 }
