@@ -2,7 +2,13 @@
   "timezone": "Asia/Shanghai",
   "approvedDate": "2026-09-03",
   "versionPath": "/versions/2026-09-03-anti-war-victory-81.html",
-  "scheduledVersions": [],
+  "scheduledVersions": [
+    {
+      "date": "2026-09-04",
+      "versionPath": "/versions/2026-09-04-fiba-womens-world-cup-opening.html",
+      "updatedAt": "2026-09-03T18:28:55+08:00"
+    }
+  ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
