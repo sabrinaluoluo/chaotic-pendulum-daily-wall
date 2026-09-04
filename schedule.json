@@ -2,10 +2,16 @@
   "timezone": "Asia/Shanghai",
   "approvedDate": "2026-09-04",
   "versionPath": "/versions/2026-09-04-fiba-womens-world-cup-opening.html",
-  "scheduledVersions": [],
+  "scheduledVersions": [
+    {
+      "date": "2026-09-05",
+      "versionPath": "/versions/2026-09-05-indigenous-women-girls-day.html",
+      "updatedAt": "2026-09-04T20:06:26+08:00"
+    }
+  ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-03T22:30:46+08:00",
+  "updatedAt": "2026-09-04T20:06:26+08:00",
   "refreshSeconds": 300
 }
