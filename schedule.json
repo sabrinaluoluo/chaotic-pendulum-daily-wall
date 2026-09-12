@@ -2,10 +2,16 @@
   "timezone": "Asia/Shanghai",
   "approvedDate": "2026-09-12",
   "versionPath": "/versions/2026-09-12-world-first-aid-day.html",
-  "scheduledVersions": [],
+  "scheduledVersions": [
+    {
+      "date": "2026-09-14",
+      "versionPath": "/versions/2026-09-14-cat-after-hours.html",
+      "updatedAt": "2026-09-12T07:16:04.297Z"
+    }
+  ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-12T06:21:00Z",
+  "updatedAt": "2026-09-12T07:16:04.297Z",
   "refreshSeconds": 300
 }
