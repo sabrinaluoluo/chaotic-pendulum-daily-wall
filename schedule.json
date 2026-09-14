@@ -7,11 +7,16 @@
       "date": "2026-09-15",
       "versionPath": "/versions/2026-09-15-tiangong-2-tenth.html",
       "updatedAt": "2026-09-14T03:13:25.810Z"
+    },
+    {
+      "date": "2026-09-16",
+      "versionPath": "/versions/2026-09-16-bamboo-rain.html",
+      "updatedAt": "2026-09-14T03:41:20.386Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-14T03:13:25.810Z",
+  "updatedAt": "2026-09-14T03:41:20.386Z",
   "refreshSeconds": 300
 }
