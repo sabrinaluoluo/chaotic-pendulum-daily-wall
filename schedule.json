@@ -2,10 +2,16 @@
   "timezone": "Asia/Shanghai",
   "approvedDate": "2026-09-14",
   "versionPath": "/versions/2026-09-14-cat-after-hours.html",
-  "scheduledVersions": [],
+  "scheduledVersions": [
+    {
+      "date": "2026-09-15",
+      "versionPath": "/versions/2026-09-15-tiangong-2-tenth.html",
+      "updatedAt": "2026-09-14T03:13:25.810Z"
+    }
+  ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-13T14:34:52Z",
+  "updatedAt": "2026-09-14T03:13:25.810Z",
   "refreshSeconds": 300
 }
