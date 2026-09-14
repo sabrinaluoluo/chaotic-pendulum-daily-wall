@@ -12,11 +12,16 @@
       "date": "2026-09-16",
       "versionPath": "/versions/2026-09-16-bamboo-rain.html",
       "updatedAt": "2026-09-14T03:41:20.386Z"
+    },
+    {
+      "date": "2026-09-17",
+      "versionPath": "/versions/2026-09-17-undersea-post-office.html",
+      "updatedAt": "2026-09-14T04:13:29.337Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-14T03:41:20.386Z",
+  "updatedAt": "2026-09-14T04:13:29.337Z",
   "refreshSeconds": 300
 }
