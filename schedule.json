@@ -1,13 +1,8 @@
 {
   "timezone": "Asia/Shanghai",
-  "approvedDate": "2026-09-14",
-  "versionPath": "/versions/2026-09-14-cat-after-hours.html",
+  "approvedDate": "2026-09-15",
+  "versionPath": "/versions/2026-09-15-tiangong-2-tenth.html",
   "scheduledVersions": [
-    {
-      "date": "2026-09-15",
-      "versionPath": "/versions/2026-09-15-tiangong-2-tenth.html",
-      "updatedAt": "2026-09-14T03:13:25.810Z"
-    },
     {
       "date": "2026-09-16",
       "versionPath": "/versions/2026-09-16-bamboo-rain.html",
@@ -27,6 +22,6 @@
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-14T09:07:20.823Z",
+  "updatedAt": "2026-09-15T02:26:38Z",
   "refreshSeconds": 300
 }
