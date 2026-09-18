@@ -1,17 +1,11 @@
 {
   "timezone": "Asia/Shanghai",
-  "approvedDate": "2026-09-18",
-  "versionPath": "/versions/2026-09-18-september-eighteenth-95.html",
-  "scheduledVersions": [
-    {
-      "date": "2026-09-19",
-      "versionPath": "/versions/2026-09-19-cosmic-convenience-store.html",
-      "updatedAt": "2026-09-14T09:07:20.823Z"
-    }
-  ],
+  "approvedDate": "2026-09-19",
+  "versionPath": "/versions/2026-09-19-cosmic-convenience-store.html",
+  "scheduledVersions": [],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-17T14:37:09Z",
+  "updatedAt": "2026-09-18T14:35:35Z",
   "refreshSeconds": 300
 }
