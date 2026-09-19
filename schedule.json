@@ -7,11 +7,16 @@
       "date": "2026-09-21",
       "versionPath": "/versions/2026-09-21-international-peace-day.html",
       "updatedAt": "2026-09-19T07:25:40.674Z"
+    },
+    {
+      "date": "2026-09-22",
+      "versionPath": "/versions/2026-09-22-robot-after-work.html",
+      "updatedAt": "2026-09-19T08:30:55.605Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-19T07:25:40.674Z",
+  "updatedAt": "2026-09-19T08:30:55.605Z",
   "refreshSeconds": 300
 }
