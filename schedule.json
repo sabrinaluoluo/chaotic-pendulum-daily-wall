@@ -1,18 +1,8 @@
 {
   "timezone": "Asia/Shanghai",
-  "approvedDate": "2026-09-21",
-  "versionPath": "/versions/2026-09-21-international-peace-day.html",
+  "approvedDate": "2026-09-23",
+  "versionPath": "/versions/2026-09-23-autumn-equinox-harvest.html",
   "scheduledVersions": [
-    {
-      "date": "2026-09-22",
-      "versionPath": "/versions/2026-09-22-robot-after-work.html",
-      "updatedAt": "2026-09-19T08:30:55.605Z"
-    },
-    {
-      "date": "2026-09-23",
-      "versionPath": "/versions/2026-09-23-autumn-equinox-harvest.html",
-      "updatedAt": "2026-09-19T09:10:03.000Z"
-    },
     {
       "date": "2026-09-24",
       "versionPath": "/versions/2026-09-24-osmanthus-lantern-shadows.html",
@@ -22,6 +12,6 @@
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-20T14:37:50Z",
+  "updatedAt": "2026-09-22T14:39:30Z",
   "refreshSeconds": 300
 }
