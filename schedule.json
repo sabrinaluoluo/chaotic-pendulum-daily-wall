@@ -12,11 +12,16 @@
       "date": "2026-09-29",
       "versionPath": "/versions/2026-09-29-tiangong-first-step.html",
       "updatedAt": "2026-09-24T13:22:34.000Z"
+    },
+    {
+      "date": "2026-09-30",
+      "versionPath": "/versions/2026-09-30-mountains-remember.html",
+      "updatedAt": "2026-09-24T13:38:58.000Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-24T13:22:34.000Z",
+  "updatedAt": "2026-09-24T13:38:58.000Z",
   "refreshSeconds": 300
 }
