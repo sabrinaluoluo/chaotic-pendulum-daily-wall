@@ -1,13 +1,8 @@
 {
   "timezone": "Asia/Shanghai",
-  "approvedDate": "2026-09-29",
-  "versionPath": "/versions/2026-09-29-tiangong-first-step.html",
+  "approvedDate": "2026-09-30",
+  "versionPath": "/versions/2026-09-30-mountains-remember.html",
   "scheduledVersions": [
-    {
-      "date": "2026-09-30",
-      "versionPath": "/versions/2026-09-30-mountains-remember.html",
-      "updatedAt": "2026-09-24T13:38:58.000Z"
-    },
     {
       "date": "2026-10-08",
       "versionPath": "/versions/2026-10-08-cold-dew-autumn.html",
@@ -27,6 +22,6 @@
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-29T12:00:36.000Z",
+  "updatedAt": "2026-09-29T14:37:42Z",
   "refreshSeconds": 300
 }
