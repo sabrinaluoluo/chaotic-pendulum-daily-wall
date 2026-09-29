@@ -17,11 +17,16 @@
       "date": "2026-10-09",
       "versionPath": "/versions/2026-10-09-mountain-post-route.html",
       "updatedAt": "2026-09-29T11:30:13.000Z"
+    },
+    {
+      "date": "2026-10-10",
+      "versionPath": "/versions/2026-10-10-a-home-for-feelings.html",
+      "updatedAt": "2026-09-29T12:00:36.000Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-09-29T11:30:13.000Z",
+  "updatedAt": "2026-09-29T12:00:36.000Z",
   "refreshSeconds": 300
 }
