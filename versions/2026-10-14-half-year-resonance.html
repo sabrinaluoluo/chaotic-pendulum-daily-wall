@@ -1,0 +1,1566 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#02050a" />
+    <meta name="description" content="混沌摆每日动态屏幕 V2 固定渲染器" />
+    <title>CHAOTIC PENDULUM · 半年的回响</title>
+    <style>:root {
+  color-scheme: dark;
+  background: #000;
+  font-family: "Segoe UI Variable Text", "Microsoft YaHei UI", sans-serif;
+}
+
+/* Versioned pure-pendulum profile. No added scene objects or motion. */
+.stage[data-presentation="minimal-metal"] .phase {top:58px}
+.stage[data-presentation="minimal-metal"] .phase .cn {font-size:18px;font-weight:350;letter-spacing:.17em;color:#cbd0ce;text-shadow:none}
+.stage[data-presentation="minimal-metal"] .phase .en {margin-top:13px;font-size:10px;letter-spacing:.28em;color:#bba888}
+.stage[data-presentation="minimal-metal"] .phase .lunar {font-size:11px;color:#8d9796;letter-spacing:.1em}
+.stage[data-presentation="minimal-metal"] .phase .rule {display:none}
+.stage[data-presentation="minimal-metal"] .brand .company {color:#acb5b5;letter-spacing:.18em}
+.stage[data-presentation="minimal-metal"] .brand .foundation {color:#8f9897}
+.stage[data-presentation="minimal-metal"] .brand .foundation i {color:#bba888}
+.stage[data-presentation="minimal-metal"] .weather-name {color:#b7c2c3}
+.stage[data-presentation="minimal-metal"] .location {color:#92a09f}
+.stage[data-presentation="minimal-metal"] .location .sync {color:#8e9996;border-color:#56615c}
+.stage[data-presentation="minimal-metal"] .environment-data {font-size:11px;color:#a5aeac}
+.stage[data-presentation="minimal-metal"] .date-line {color:#bcc4c1}
+.stage[data-presentation="minimal-metal"] .seconds {color:#c4b391}
+.stage[data-presentation="minimal-metal"] .timezone {color:#88948e}
+.stage[data-presentation="minimal-metal"] .disclosure {color:#8d968e;font:9px/1 "Cascadia Mono",Consolas,monospace;letter-spacing:.2em;bottom:22px}
+.stage[data-presentation="minimal-metal"] .veil {background:radial-gradient(ellipse at 52% 48%,transparent 15%,rgba(0,0,0,.2) 100%)}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.renderer {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+.stage {
+  --cover-scale: 1;
+  position: absolute;
+  isolation: isolate;
+  top: 50%;
+  left: 50%;
+  width: 1280px;
+  height: 960px;
+  overflow: hidden;
+  color: var(--ink, #edf3f8);
+  background: var(--background, #02050a);
+  cursor: default;
+  user-select: none;
+  transform: translate(-50%, -50%) scale(var(--cover-scale));
+  transform-origin: center;
+}
+
+#static-background,
+#dynamic-scene,
+.screen-frame {
+  position: absolute;
+  inset: 0;
+  width: 1280px;
+  height: 960px;
+}
+
+#static-background {
+  z-index: 0;
+}
+
+#dynamic-scene {
+  z-index: 1;
+}
+
+.veil {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 1280px;
+  height: 960px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 65% 46%, transparent 0 28%, rgb(1 4 10 / 8%) 58%, rgb(0 0 0 / 48%) 100%),
+    linear-gradient(90deg, rgb(0 0 0 / 40%), transparent 28% 73%, rgb(0 0 0 / 28%)),
+    linear-gradient(0deg, rgb(0 0 0 / 42%), transparent 23% 83%, rgb(0 0 0 / 18%));
+}
+
+.brand,
+.phase,
+.environment,
+.clock,
+.science-note,
+.disclosure,
+.error-state {
+  position: absolute;
+  z-index: 3;
+}
+
+.brand {
+  top: 55px;
+  left: 60px;
+}
+
+.brand h1 {
+  margin: 0;
+  color: rgb(244 247 250 / 95%);
+  font-family: "Segoe UI Variable Display", "Helvetica Neue", Arial, sans-serif;
+  font-size: 38px;
+  font-weight: 270;
+  line-height: 1;
+  letter-spacing: var(--logo-spacing, 0.155em);
+  white-space: nowrap;
+  text-shadow: 0 0 34px rgb(139 180 226 / 11%);
+}
+
+.brand .company {
+  margin-top: 14px;
+  color: rgb(218 227 236 / 73%);
+  font-size: 13px;
+  font-weight: 390;
+  line-height: 1;
+  letter-spacing: 0.22em;
+}
+
+.brand .foundation {
+  margin-top: 14px;
+  color: rgb(119 139 164 / 64%);
+  font: 10px/1 "Cascadia Mono", Consolas, monospace;
+  letter-spacing: 0.17em;
+}
+
+.brand .foundation i {
+  color: #b6d9f4;
+  font-style: normal;
+}
+
+.phase {
+  top: 53px;
+  right: 60px;
+  text-align: right;
+}
+
+.phase .cn {
+  color: rgb(240 246 251 / 95%);
+  font-size: 30px;
+  font-weight: 315;
+  line-height: 1;
+  letter-spacing: 0.38em;
+  text-shadow: 0 0 30px rgb(149 198 239 / 18%);
+}
+
+.phase .en {
+  margin-top: 13px;
+  color: rgb(166 207 238 / 88%);
+  font: 10px/1 "Cascadia Mono", Consolas, monospace;
+  letter-spacing: 0.25em;
+}
+
+.phase .lunar {
+  margin-top: 13px;
+  color: rgb(157 175 196 / 67%);
+  font-size: 11px;
+  font-weight: 390;
+  letter-spacing: 0.18em;
+}
+
+.phase .rule {
+  width: 142px;
+  height: 1px;
+  margin: 16px 0 0 auto;
+  background: linear-gradient(90deg, transparent, rgb(163 207 238 / 72%));
+}
+
+.science-note {
+  top: 166px;
+  right: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  color: rgb(110 135 163 / 58%);
+  font: 9px/1 "Cascadia Mono", Consolas, monospace;
+  letter-spacing: 0.16em;
+  list-style: none;
+}
+
+.science-note li:first-child {
+  color: rgb(177 211 237 / 80%);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.environment {
+  bottom: 52px;
+  left: 60px;
+  width: 525px;
+}
+
+.location {
+  display: flex;
+  align-items: baseline;
+  gap: 13px;
+  color: rgb(121 142 168 / 72%);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.18em;
+}
+
+.location b {
+  color: rgb(224 232 239 / 86%);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+}
+
+.location .sync {
+  padding-left: 13px;
+  border-left: 1px solid rgb(163 207 238 / 31%);
+  color: rgb(100 123 149 / 58%);
+  font: 9px/1 "Cascadia Mono", Consolas, monospace;
+  letter-spacing: 0.12em;
+}
+
+.weather {
+  display: flex;
+  align-items: baseline;
+  gap: 17px;
+  margin-top: 15px;
+}
+
+.temperature {
+  color: rgb(239 244 248 / 95%);
+  font-size: 55px;
+  font-weight: 230;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.88;
+  letter-spacing: -0.06em;
+  text-shadow: 0 0 34px rgb(139 180 226 / 10%);
+}
+
+.weather-name {
+  color: rgb(168 210 239 / 89%);
+  font-size: 16px;
+  font-weight: 430;
+  letter-spacing: 0.16em;
+}
+
+.environment-data {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  color: rgb(133 153 179 / 78%);
+  font: 10px/1 "Cascadia Mono", "Microsoft YaHei UI", monospace;
+  letter-spacing: 0.1em;
+}
+
+.environment-data span + span {
+  padding-left: 16px;
+  border-left: 1px solid rgb(255 255 255 / 11%);
+}
+
+.clock {
+  right: 60px;
+  bottom: 49px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.date-line {
+  margin-right: 5px;
+  color: rgb(149 169 193 / 82%);
+  font-size: 15px;
+  font-weight: 380;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: 0.18em;
+}
+
+.time-line {
+  display: flex;
+  align-items: baseline;
+  margin-top: 15px;
+  color: rgb(240 245 249 / 96%);
+  font-family: "Segoe UI Variable Display", "Helvetica Neue", sans-serif;
+  font-size: 92px;
+  font-weight: 210;
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 0.82;
+  letter-spacing: -0.075em;
+  text-shadow: 0 0 40px rgb(126 177 219 / 11%);
+}
+
+.seconds {
+  width: 2.3em;
+  margin-left: 0.65em;
+  color: rgb(156 205 239 / 90%);
+  font: 14px/1 "Cascadia Mono", Consolas, monospace;
+  letter-spacing: 0.1em;
+}
+
+.timezone {
+  margin-top: 17px;
+  color: rgb(99 123 151 / 62%);
+  font: 9px/1 "Cascadia Mono", Consolas, monospace;
+  letter-spacing: 0.2em;
+}
+
+.disclosure {
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  color: rgb(101 121 145 / 46%);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+
+.error-state {
+  left: 60px;
+  bottom: 18px;
+  margin: 0;
+  color: rgb(166 207 238 / 62%);
+  font: 9px/1 "Cascadia Mono", Consolas, monospace;
+  letter-spacing: 0.1em;
+}
+
+.screen-frame {
+  z-index: 6;
+  pointer-events: none;
+  border: 2px solid rgb(255 255 255 / 3.5%);
+  box-shadow: inset 0 0 86px rgb(0 0 0 / 20%);
+}
+
+.blackout {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: none;
+  background: #000;
+}
+
+.renderer.is-blackout .blackout {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .renderer {
+    --motion-preference: reduced;
+  }
+}
+
+
+/* Archive profile: the same information shell with a warm, legible palette. */
+.stage[data-presentation="archive-brass"] .brand .company {font-size:15px;color:#d0c5b1;letter-spacing:.16em}
+.stage[data-presentation="archive-brass"] .brand .foundation {font-size:12px;color:#c6a267;letter-spacing:.12em}
+.stage[data-presentation="archive-brass"] .phase {top:53px}
+.stage[data-presentation="archive-brass"] .phase .cn {font-size:32px;font-weight:550;letter-spacing:.055em;color:#f5e6c7}
+.stage[data-presentation="archive-brass"] .phase .en {font-size:12px;letter-spacing:.12em;color:#cfab72}
+.stage[data-presentation="archive-brass"] .phase .lunar {font-size:13px;color:#acbaba;letter-spacing:.1em}
+.stage[data-presentation="archive-brass"] .phase .rule {width:240px;background:linear-gradient(90deg,transparent,#bd9857)}
+.stage[data-presentation="archive-brass"] .science-note {top:169px;gap:8px;font:12px/1.3 "Microsoft YaHei UI",sans-serif;letter-spacing:.02em;color:#acbaba}
+.stage[data-presentation="archive-brass"] .science-note li:first-child {font-size:12px;color:#d1c5b1}
+.stage[data-presentation="archive-brass"] .weather-name {color:#e2b878}
+.stage[data-presentation="archive-brass"] .location {color:#cad0ca;font-size:12px;letter-spacing:.09em}
+.stage[data-presentation="archive-brass"] .location .sync {font:11px/1 "Microsoft YaHei UI",sans-serif;color:#b6c1bb;letter-spacing:0;padding-left:10px}
+.stage[data-presentation="archive-brass"] .environment-data {font-size:13px;color:#cad0ca;letter-spacing:.01em;gap:14px}
+.stage[data-presentation="archive-brass"] .date-line {font-size:17px;color:#e5ddc9;letter-spacing:.08em}
+.stage[data-presentation="archive-brass"] .seconds {color:#d8ab67}
+.stage[data-presentation="archive-brass"] .timezone {font-size:11px;color:#aebbb7}
+.stage[data-presentation="archive-brass"] .disclosure {font-size:12px;color:#c3c6ba;letter-spacing:.04em}
+.stage[data-presentation="archive-brass"] .error-state {display:none}
+.stage[data-presentation="archive-brass"] .environment {width:395px;bottom:44px}
+.stage[data-presentation="archive-brass"] .veil {
+ background:linear-gradient(0deg,rgba(4,13,15,.9),transparent 26% 76%,rgba(4,13,15,.67)),
+ linear-gradient(90deg,rgba(3,10,12,.35),transparent 33% 68%,rgba(3,10,12,.25));
+}
+</style>
+  </head>
+  <body>
+    <main
+      id="renderer"
+      class="renderer"
+      data-target-resolution="1280x960"
+      data-renderer-version="2.2.0" data-quality-profile="chaotic-premium-v1" data-candidate="half-year-resonance" data-arm-1-px="190" data-arm-2-px="190" data-anchor-x="640" data-motion-model="unforced-double-pendulum-rk4"
+      data-dpr="1"
+      data-status="loading"
+    >
+      <section id="stage" class="stage" aria-label="混沌摆每日动态屏幕">
+        <canvas id="static-background" width="1280" height="960" aria-hidden="true"></canvas>
+        <canvas id="dynamic-scene" width="1280" height="960" aria-hidden="true"></canvas>
+        <div class="veil" aria-hidden="true"></div>
+
+        <header class="brand" aria-label="公司品牌">
+          <h1 id="logo-text">CHAOTIC PENDULUM</h1>
+          <div id="company-text" class="company">混沌摆（深圳）科技有限公司</div>
+          <div class="foundation">FOUNDED 2026.04.14 <i>·</i> DAY <span id="company-day">----</span></div>
+        </header>
+
+        <section class="phase" aria-label="当日主题">
+          <div id="theme-title" class="cn"></div>
+          <div id="theme-subtitle" class="en"></div>
+          <div id="lunar-label" class="lunar"></div>
+          <div class="rule"></div>
+        </section>
+
+        <ul id="theme-facts" class="science-note" aria-label="主题数据"></ul>
+
+        <section class="environment" aria-label="日期、天气与空气质量">
+          <div class="location">
+            <b id="location">深圳</b>
+            <span id="location-english">SHENZHEN · NANSHAN</span>
+            <span id="sync-state" class="sync">UPDATED --:--</span>
+          </div>
+          <div class="weather">
+            <span id="temperature" class="temperature">--°C</span>
+            <span id="weather" class="weather-name">气象同步中</span>
+          </div>
+          <div class="environment-data">
+            <span id="lunar-data-label">农历 七月初八 · 上弦</span>
+            <span id="aqi">AQI --</span>
+            <span id="pm25">PM2.5 --</span>
+          </div>
+        </section>
+
+        <section class="clock" aria-label="北京时间">
+          <div id="clock-date" class="date-line">2026.08.20 星期四</div>
+          <time id="clock-time" class="time-line">
+            <span id="clock-hm">--:--</span><span id="clock-seconds" class="seconds">--</span>
+          </time>
+          <div class="timezone">BEIJING TIME · UTC+8</div>
+        </section>
+
+        <div id="disclosure" class="disclosure">原创天文编辑视觉 · 非新闻现场照片</div>
+        <p id="error-state" class="error-state" role="status"></p>
+        <div class="screen-frame" aria-hidden="true"></div>
+      </section>
+      <div id="blackout" class="blackout" aria-hidden="true"></div>
+    </main>
+
+    <script id="embedded-content" type="application/json">{"schemaVersion":"2.0.0","qualityProfile":"chaotic-premium-v1","date":"2026-10-14","themeId":"half-year-resonance","rendererVersion":"2.2.0","presentation":{"profile":"minimal-metal"},"logo":{"kind":"wordmark","text":"CHAOTIC PENDULUM","letterSpacingEm":0.155},"brandText":{"company":"混沌摆（深圳）科技有限公司","foundedDate":"2026-04-14","companyDay":184,"themeTitle":"半年的回响","themeSubtitle":"6 MONTHS","themeFacts":[],"disclosure":"2026.04.14 — 2026.10.14"},"colors":{"background":"#050708","surface":"#161B1E","ink":"#E5E8E8","muted":"#879393","accent":"#D9C7A4","accentSecondary":"#B5C2C9","rod":"#CBD4D9","trail":"#D8C29D","shadow":"#020304"},"background":{"baseColor":"#050708","radialGlow":{"x":0.52,"y":0.47,"radius":0.68,"innerColor":"#11191B","outerColor":"#050708"},"imageAssetId":null,"imageFit":"cover","imageOpacity":1},"staticDecorations":[],"dynamicElements":[{"id":"metal-bearing","type":"metalRingNode","binding":"anchor","radius":4,"rimWidth":1.4,"material":"platinum"},{"id":"platinum-ring","type":"metalRingNode","binding":"joint","radius":40,"rimWidth":4.2,"material":"platinum"},{"id":"champagne-ring","type":"metalRingNode","binding":"end","radius":35,"rimWidth":3.8,"material":"champagne"}],"pendulum":{"enabled":true,"anchor":[0.5,0.345],"length1":190,"length2":190,"physicsLength1":1,"physicsLength2":1,"mass1":1.08,"mass2":0.94,"gravity":9.81,"initial":{"angle1":2.048461709157646,"angle2":2.7475996183175555,"velocity1":0,"velocity2":0},"timeScale":0.4,"fps":30,"physicsHz":120,"rodStyle":"filament","trail":{"enabled":true,"maxPoints":180,"lifetimeMs":5000,"alpha":0.32,"width":0.9}},"environment":{"timezone":"Asia/Shanghai","location":"深圳","locationEnglish":"SHENZHEN · NANSHAN","latitude":22.5431,"longitude":114.0579,"weatherProvider":"open-meteo","refreshMinutes":30,"lunarLabel":"丙午年 · 九月初五","lunarDataLabel":"农历 九月初五","fallback":{"temperature":25,"weather":"晴","aqi":88,"pm25":36},"fallbackObservedAt":"2026-10-12T20:00:00+08:00","aqiStandard":"US","playbackWindow":{"start":"09:00","end":"22:00"}},"assetManifest":[]}</script>
+<script id="embedded-assets" type="application/json">{}</script>
+<script>(() => {
+  "use strict";
+
+  const DESIGN_WIDTH = 1280;
+  const DESIGN_HEIGHT = 960;
+  const DPR = 1;
+  const DEFAULT_FPS = 30;
+  const MAX_FPS = 60;
+  const MAX_PHYSICS_HZ = 120;
+  const DEFAULT_CONTENT_PATH = "/daily/2026-08-20/content.json";
+  const FALLBACK_CONTENT_PATH = "/renderer-v2/fallback-content.json";
+  // 2.2 adds declarative metal rings and a quiet typography profile.
+  // Physics, two canvas layers, timing and the single RAF remain unchanged.
+  const EMBEDDED_CONTENT = document.getElementById("embedded-content");
+  const EMBEDDED_ASSETS = document.getElementById("embedded-assets");
+  const embeddedAssets = EMBEDDED_ASSETS ? JSON.parse(EMBEDDED_ASSETS.textContent) : {};
+  const params = new URLSearchParams(location.search);
+  const qaEnabled = params.get("qa") === "1" && (params.get("preview") === "1" || /^(127\.0\.0\.1|localhost)$/.test(location.hostname));
+  let qaPaused = qaEnabled && params.get("freeze") === "1";
+  const qaMetrics = { frames: 0, physicsSteps: 0, simulatedSeconds: 0, maximumPaintMs: 0 };
+  let lastPhysicsAt = 0;
+
+  const renderer = document.getElementById("renderer");
+  const stage = document.getElementById("stage");
+  const staticCanvas = document.getElementById("static-background");
+  const dynamicCanvas = document.getElementById("dynamic-scene");
+  const staticContext = staticCanvas.getContext("2d", { alpha: false });
+  const dynamicContext = dynamicCanvas.getContext("2d", { alpha: true });
+
+  const dom = {
+    logo: document.getElementById("logo-text"),
+    company: document.getElementById("company-text"),
+    companyDay: document.getElementById("company-day"),
+    themeTitle: document.getElementById("theme-title"),
+    themeSubtitle: document.getElementById("theme-subtitle"),
+    lunarLabel: document.getElementById("lunar-label"),
+    lunarDataLabel: document.getElementById("lunar-data-label"),
+    themeFacts: document.getElementById("theme-facts"),
+    location: document.getElementById("location"),
+    locationEnglish: document.getElementById("location-english"),
+    syncState: document.getElementById("sync-state"),
+    temperature: document.getElementById("temperature"),
+    weather: document.getElementById("weather"),
+    aqi: document.getElementById("aqi"),
+    pm25: document.getElementById("pm25"),
+    clockTime: document.getElementById("clock-time"),
+    clockHm: document.getElementById("clock-hm"),
+    clockSeconds: document.getElementById("clock-seconds"),
+    clockDate: document.getElementById("clock-date"),
+    disclosure: document.getElementById("disclosure"),
+    errorState: document.getElementById("error-state")
+  };
+
+  const runtime = {
+    content: null,
+    assets: new Map(),
+    source: "",
+    frameId: null,
+    activityTimer: null,
+    lastFrameAt: 0,
+    accumulator: 0,
+    lastClockSecond: -1,
+    nextWeatherAt: 0,
+    weatherLoading: false,
+    startedAt: performance.now(),
+    nodeTextures: new Map(),
+    particleFields: new Map(),
+    preview: new URLSearchParams(window.location.search).get("preview") === "1",
+    pendulum: {
+      angle1: 0,
+      angle2: 0,
+      velocity1: 0,
+      velocity2: 0,
+      trail: []
+    }
+  };
+
+  function queueFrame() {
+    if (runtime.frameId === null) runtime.frameId = requestAnimationFrame(renderDynamicFrame);
+  }
+
+  function clamp(value, minimum, maximum) {
+    return Math.min(maximum, Math.max(minimum, value));
+  }
+
+  function safeContentPath() {
+    const requested = new URLSearchParams(window.location.search).get("content") || DEFAULT_CONTENT_PATH;
+    if (!/^\/daily\/[0-9]{4}-[0-9]{2}-[0-9]{2}\/content\.json$/.test(requested)) {
+      throw new Error("contentPath 不符合 V2 同源路径规则");
+    }
+    return requested;
+  }
+
+  async function fetchJson(path) {
+    const response = await fetch(path, { cache: "no-store", credentials: "same-origin" });
+    if (!response.ok) throw new Error(`${path} 返回 HTTP ${response.status}`);
+    return response.json();
+  }
+
+  function assertRuntimeContract(content) {
+    if (!content || content.schemaVersion !== "2.0.0") throw new Error("不支持的 content schemaVersion");
+    if (!["2.0.0", "2.1.0", "2.2.0"].includes(content.rendererVersion)) throw new Error("content 与固定渲染器版本不兼容");
+    if (!Array.isArray(content.staticDecorations) || !Array.isArray(content.dynamicElements)) {
+      throw new Error("静态元素和动态元素必须分开存放");
+    }
+    if (content.pendulum.fps > MAX_FPS || content.pendulum.physicsHz > MAX_PHYSICS_HZ) {
+      throw new Error("内容超过固定渲染器性能上限");
+    }
+    const dayPrefix = `/daily/${content.date}/assets/`;
+    for (const asset of content.assetManifest) {
+      if (!asset.path.startsWith(dayPrefix)) throw new Error(`素材越界：${asset.id}`);
+    }
+  }
+
+  async function loadAssets(content) {
+    const loaded = new Map();
+    const results = await Promise.all(content.assetManifest.map(async (asset) => {
+      const image = new Image();
+      image.decoding = "async";
+      await new Promise((resolve, reject) => {
+        image.addEventListener("load", resolve, { once: true });
+        image.addEventListener("error", () => reject(new Error(`素材加载失败：${asset.id}`)), { once: true });
+        image.src = embeddedAssets[asset.id] || asset.path;
+      });
+      loaded.set(asset.id, image);
+      return asset.id;
+    }).map((promise, index) => promise.catch((error) => {
+      if (content.assetManifest[index].required) throw error;
+      return null;
+    })));
+    void results;
+    return loaded;
+  }
+
+  function applyPalette(content) {
+    stage.dataset.presentation = content.presentation?.profile || 'premium';
+    const root = stage.style;
+    root.setProperty("--background", content.colors.background);
+    root.setProperty("--ink", content.colors.ink);
+    root.setProperty("--muted", content.colors.muted);
+    root.setProperty("--accent", content.colors.accent);
+    root.setProperty("--logo-spacing", `${content.logo.letterSpacingEm}em`);
+  }
+
+  function applyTextContent(content) {
+    dom.logo.textContent = content.logo.text;
+    dom.company.textContent = content.brandText.company;
+    dom.companyDay.textContent = String(content.brandText.companyDay).padStart(4, "0");
+    dom.themeTitle.textContent = content.brandText.themeTitle;
+    dom.themeSubtitle.textContent = content.brandText.themeSubtitle;
+    dom.lunarLabel.textContent = content.environment.lunarLabel;
+    dom.lunarDataLabel.textContent = content.environment.lunarDataLabel;
+    dom.location.textContent = content.environment.location;
+    dom.locationEnglish.textContent = content.environment.locationEnglish;
+    dom.disclosure.textContent = content.brandText.disclosure;
+    dom.themeFacts.replaceChildren(...content.brandText.themeFacts.map((fact) => {
+      const item = document.createElement("li");
+      item.textContent = fact;
+      return item;
+    }));
+  }
+
+  function resetPhysics(content) {
+    const initial = content.pendulum.initial;
+    runtime.pendulum.angle1 = initial.angle1;
+    runtime.pendulum.angle2 = initial.angle2;
+    runtime.pendulum.velocity1 = initial.velocity1;
+    runtime.pendulum.velocity2 = initial.velocity2;
+    runtime.pendulum.trail.length = 0;
+    runtime.nodeTextures.clear();
+    runtime.particleFields.clear();
+    runtime.startedAt = performance.now();
+    runtime.accumulator = 0;
+    runtime.lastFrameAt = 0;
+    lastPhysicsAt = 0;
+  }
+
+  function setEnvironmentValues(values, source) {
+    dom.temperature.textContent = `${Math.round(values.temperature)}°C`;
+    dom.weather.textContent = values.weather;
+    dom.aqi.textContent = `${runtime.content.environment.aqiStandard === "US" ? "US AQI" : "AQI"} ${Math.round(values.aqi)}`;
+    dom.pm25.textContent = `PM2.5 ${Math.round(values.pm25)}`;
+    dom.syncState.textContent = source;
+  }
+
+  function aqiLabel(value) {
+    if (!Number.isFinite(value)) return "";
+    if (value <= 50) return "优";
+    if (value <= 100) return "良";
+    if (value <= 150) return "轻度";
+    if (value <= 200) return "中度";
+    return "较差";
+  }
+
+  function weatherLabel(code) {
+    const labels = {
+      0: "晴", 1: "晴间多云", 2: "多云", 3: "阴",
+      45: "有雾", 48: "雾凇", 51: "细雨", 53: "小雨", 55: "细雨",
+      61: "小雨", 63: "中雨", 65: "大雨", 80: "阵雨", 81: "阵雨", 82: "强阵雨",
+      95: "雷阵雨", 96: "雷阵雨", 99: "强雷阵雨"
+    };
+    return labels[code] || "天气变化";
+  }
+
+  async function refreshWeather() {
+    const content = runtime.content;
+    if (!content || runtime.weatherLoading || content.environment.weatherProvider === "none" || (qaEnabled && params.get("offline") === "1")) return;
+    runtime.weatherLoading = true;
+    const environment = content.environment;
+    const latitude = encodeURIComponent(environment.latitude);
+    const longitude = encodeURIComponent(environment.longitude);
+    const timezone = encodeURIComponent(environment.timezone);
+    const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=${timezone}`;
+    const airUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&current=us_aqi,pm2_5&timezone=${timezone}`;
+    try {
+      const [forecastResponse, airResponse] = await Promise.all([fetch(forecastUrl, { signal: AbortSignal.timeout(8000) }), fetch(airUrl, { signal: AbortSignal.timeout(8000) })]);
+      if (!forecastResponse.ok || !airResponse.ok) throw new Error("天气服务响应失败");
+      const [forecast, air] = await Promise.all([forecastResponse.json(), airResponse.json()]);
+      setEnvironmentValues({
+        temperature: forecast.current.temperature_2m,
+        weather: weatherLabel(forecast.current.weather_code),
+        aqi: air.current.us_aqi,
+        pm25: air.current.pm2_5
+      }, `UPDATED ${new Intl.DateTimeFormat("zh-CN", {
+        timeZone: environment.timezone,
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+      }).format(new Date())}`);
+    } catch (error) {
+      const observed = environment.fallbackObservedAt?.slice(5, 16).replace("T", " ") || "";
+      setEnvironmentValues(environment.fallback, observed ? "快照 " + observed : "数据暂不可用");
+      dom.errorState.textContent = observed ? "天气与空气质量使用已标注时间的离线快照" : "等待天气与空气质量数据";
+    } finally {
+      runtime.nextWeatherAt = Date.now() + environment.refreshMinutes * 60_000;
+      runtime.weatherLoading = false;
+    }
+  }
+
+  function resizeStage() {
+    const scale = (params.get("fit") === "contain" ? Math.min : Math.max)(window.innerWidth / DESIGN_WIDTH, window.innerHeight / DESIGN_HEIGHT);
+    stage.style.setProperty("--cover-scale", String(scale));
+    staticCanvas.width = DESIGN_WIDTH * DPR;
+    staticCanvas.height = DESIGN_HEIGHT * DPR;
+    dynamicCanvas.width = DESIGN_WIDTH * DPR;
+    dynamicCanvas.height = DESIGN_HEIGHT * DPR;
+    staticContext.setTransform(DPR, 0, 0, DPR, 0, 0);
+    dynamicContext.setTransform(DPR, 0, 0, DPR, 0, 0);
+    if (runtime.content) drawStaticScene();
+  }
+
+  function seededRandom(seed) {
+    let state = seed >>> 0;
+    return () => {
+      state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+      return state / 4294967296;
+    };
+  }
+
+  function drawCoverImage(context, image, fit) {
+    const imageRatio = image.naturalWidth / image.naturalHeight;
+    const canvasRatio = DESIGN_WIDTH / DESIGN_HEIGHT;
+    const useWidth = fit === "cover" ? imageRatio < canvasRatio : imageRatio > canvasRatio;
+    const width = useWidth ? DESIGN_WIDTH : DESIGN_HEIGHT * imageRatio;
+    const height = useWidth ? DESIGN_WIDTH / imageRatio : DESIGN_HEIGHT;
+    context.drawImage(image, (DESIGN_WIDTH - width) / 2, (DESIGN_HEIGHT - height) / 2, width, height);
+  }
+
+  function drawStaticScene() {
+    const content = runtime.content;
+    const context = staticContext;
+    context.save();
+    context.setTransform(DPR, 0, 0, DPR, 0, 0);
+    context.globalAlpha = 1;
+    context.fillStyle = content.background.baseColor;
+    context.fillRect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+
+    const glow = content.background.radialGlow;
+    const radial = context.createRadialGradient(
+      glow.x * DESIGN_WIDTH,
+      glow.y * DESIGN_HEIGHT,
+      0,
+      glow.x * DESIGN_WIDTH,
+      glow.y * DESIGN_HEIGHT,
+      glow.radius * Math.max(DESIGN_WIDTH, DESIGN_HEIGHT)
+    );
+    radial.addColorStop(0, glow.innerColor);
+    radial.addColorStop(0.34, content.colors.surface);
+    radial.addColorStop(0.72, content.colors.background);
+    radial.addColorStop(1, glow.outerColor);
+    context.fillStyle = radial;
+    context.fillRect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+
+    if (content.background.imageAssetId && runtime.assets.has(content.background.imageAssetId)) {
+      context.save();
+      context.globalAlpha = content.background.imageOpacity;
+      drawCoverImage(context, runtime.assets.get(content.background.imageAssetId), content.background.imageFit);
+      context.restore();
+    }
+
+    const decorations = content.staticDecorations;
+    decorations.filter((item) => item.type === "lunarField").forEach((item) => drawLunarField(context, item));
+    decorations.filter((item) => item.type === "orbitalArcs").forEach((item) => drawOrbitalArcs(context, item, content.colors));
+    decorations.filter((item) => item.type === "lunarDust").forEach((item) => drawLunarDust(context, item, 0));
+    decorations.filter((item) => item.type === "starField").forEach((item) => drawStarField(context, item, 0));
+    decorations.filter((item) => item.type === "terminatorBand").forEach((item) => drawTerminatorBand(context, item, content.colors));
+    decorations.filter((item) => item.type === "image").forEach((item) => drawImageDecoration(context, item));
+    context.restore();
+  }
+
+  function starPattern(decoration) {
+    if (runtime.particleFields.has(decoration.id)) return runtime.particleFields.get(decoration.id);
+    const random = seededRandom(decoration.seed);
+    const stars = Array.from({ length: decoration.count }, (_, index) => ({
+      x: random(),
+      y: random(),
+      depth: index < 240 ? 0 : index < 340 ? 1 : 2,
+      size: 0.35 + random() * (index > 340 ? 1.25 : 0.7),
+      alpha: 0.12 + random() * (index > 340 ? 0.62 : 0.34),
+      phase: random() * Math.PI * 2,
+      cool: random() > 0.18
+    }));
+    runtime.particleFields.set(decoration.id, stars);
+    return stars;
+  }
+
+  function drawStarField(context, decoration, visualTime = 0) {
+    context.save();
+    context.globalCompositeOperation = "screen";
+    for (const star of starPattern(decoration)) {
+      const speed = [0.0000007, 0.0000014, 0.0000024][star.depth];
+      const x = ((star.x + visualTime * speed) % 1) * DESIGN_WIDTH;
+      const y = ((star.y + visualTime * speed * 0.12) % 1) * DESIGN_HEIGHT;
+      const pulse = 0.72 + Math.sin(visualTime * 0.00048 + star.phase) * 0.28;
+      const color = star.cool ? "185,216,238" : "235,218,193";
+      context.fillStyle = `rgba(${color},${star.alpha * pulse * decoration.opacity})`;
+      context.beginPath();
+      context.arc(x, y, star.size * (0.82 + star.depth * 0.13), 0, Math.PI * 2);
+      context.fill();
+      if (star.depth === 2 && star.size > 1.15 && star.alpha > 0.55) {
+        context.strokeStyle = `rgba(${color},${star.alpha * pulse * 0.2 * decoration.opacity})`;
+        context.lineWidth = 0.6;
+        context.beginPath();
+        context.moveTo(x - star.size * 3.2, y);
+        context.lineTo(x + star.size * 3.2, y);
+        context.moveTo(x, y - star.size * 3.2);
+        context.lineTo(x, y + star.size * 3.2);
+        context.stroke();
+      }
+    }
+    context.restore();
+  }
+
+  function drawLunarField(context, decoration) {
+    const fieldX = decoration.center[0] * DESIGN_WIDTH;
+    const fieldY = decoration.center[1] * DESIGN_HEIGHT;
+    const fieldRadius = decoration.radius * Math.min(DESIGN_WIDTH, DESIGN_HEIGHT);
+    context.save();
+    context.globalCompositeOperation = "screen";
+    context.globalAlpha = decoration.opacity;
+    const lunarField = context.createRadialGradient(
+      fieldX + fieldRadius * 0.22,
+      fieldY - fieldRadius * 0.16,
+      fieldRadius * 0.05,
+      fieldX,
+      fieldY,
+      fieldRadius
+    );
+    lunarField.addColorStop(0, "rgba(164,203,232,0.075)");
+    lunarField.addColorStop(0.55, "rgba(99,148,190,0.028)");
+    lunarField.addColorStop(0.92, "rgba(116,166,204,0.012)");
+    lunarField.addColorStop(1, "rgba(0,0,0,0)");
+    context.fillStyle = lunarField;
+    context.beginPath();
+    context.arc(fieldX, fieldY, fieldRadius, 0, Math.PI * 2);
+    context.fill();
+    context.restore();
+  }
+
+  function lunarDustPattern(decoration) {
+    if (runtime.particleFields.has(decoration.id)) return runtime.particleFields.get(decoration.id);
+    const random = seededRandom(decoration.seed);
+    const dust = Array.from({ length: decoration.count }, () => ({
+      angle: random() * Math.PI * 2,
+      radius: 0.35 + random() * 0.65,
+      size: 0.25 + random() * 1.25,
+      alpha: 0.025 + random() * 0.12,
+      phase: random() * Math.PI * 2
+    }));
+    runtime.particleFields.set(decoration.id, dust);
+    return dust;
+  }
+
+  function drawLunarDust(context, decoration, visualTime = 0) {
+    const fieldX = decoration.center[0] * DESIGN_WIDTH;
+    const fieldY = decoration.center[1] * DESIGN_HEIGHT;
+    const fieldRadius = decoration.radius * Math.min(DESIGN_WIDTH, DESIGN_HEIGHT);
+    context.save();
+    context.globalCompositeOperation = "screen";
+    for (const dust of lunarDustPattern(decoration)) {
+      const drift = Math.sin(visualTime * 0.000045 + dust.phase) * 0.018;
+      const radius = fieldRadius * (dust.radius + drift);
+      const angle = dust.angle + visualTime * 0.000006;
+      const x = fieldX + Math.cos(angle) * radius;
+      const y = fieldY + Math.sin(angle) * radius * decoration.verticalScale;
+      context.fillStyle = `rgba(180,212,235,${dust.alpha * (0.72 + Math.sin(visualTime * 0.00035 + dust.phase) * 0.28) * decoration.opacity})`;
+      context.beginPath();
+      context.arc(x, y, dust.size, 0, Math.PI * 2);
+      context.fill();
+    }
+    context.restore();
+  }
+
+  function drawOrbitalArcs(context, decoration, colors) {
+    const centerX = decoration.center[0] * DESIGN_WIDTH;
+    const centerY = decoration.center[1] * DESIGN_HEIGHT;
+    context.save();
+    context.strokeStyle = colors[decoration.colorRole];
+    context.lineWidth = decoration.lineWidth;
+    context.globalAlpha = decoration.opacity;
+    for (const radius of decoration.radii) {
+      context.beginPath();
+      context.arc(centerX, centerY, radius * DESIGN_HEIGHT, decoration.startAngle, decoration.endAngle);
+      context.stroke();
+    }
+    context.restore();
+  }
+
+  function drawTerminatorBand(context, decoration, colors) {
+    const x = decoration.x * DESIGN_WIDTH;
+    const y = decoration.y * DESIGN_HEIGHT;
+    const width = decoration.width * DESIGN_WIDTH;
+    const height = decoration.height * DESIGN_HEIGHT;
+    const gradient = context.createLinearGradient(x + width * 0.14, 0, x + width * 0.83, 0);
+    gradient.addColorStop(0, "rgba(0,0,0,0)");
+    gradient.addColorStop(0.46, "rgba(1,4,9,0.05)");
+    gradient.addColorStop(0.5, `rgba(150,197,231,${0.035 * decoration.opacity})`);
+    gradient.addColorStop(0.54, "rgba(1,4,9,0.08)");
+    gradient.addColorStop(1, "rgba(0,0,0,0)");
+    context.save();
+    context.fillStyle = gradient;
+    context.fillRect(x, y, width, height);
+    context.restore();
+    void colors;
+  }
+
+  function drawImageDecoration(context, decoration) {
+    const image = runtime.assets.get(decoration.assetId);
+    if (!image) return;
+    const boxX = decoration.x * DESIGN_WIDTH;
+    const boxY = decoration.y * DESIGN_HEIGHT;
+    const boxWidth = decoration.width * DESIGN_WIDTH;
+    const boxHeight = decoration.height * DESIGN_HEIGHT;
+    const imageRatio = image.naturalWidth / image.naturalHeight;
+    const boxRatio = boxWidth / boxHeight;
+    const useWidth = decoration.fit === "cover" ? imageRatio < boxRatio : imageRatio > boxRatio;
+    const width = useWidth ? boxWidth : boxHeight * imageRatio;
+    const height = useWidth ? boxWidth / imageRatio : boxHeight;
+    context.save();
+    context.globalAlpha = decoration.opacity;
+    context.beginPath();
+    context.rect(boxX, boxY, boxWidth, boxHeight);
+    context.clip();
+    context.drawImage(image, boxX + (boxWidth - width) / 2, boxY + (boxHeight - height) / 2, width, height);
+    context.restore();
+  }
+
+  function derivatives(state, pendulum) {
+    const [angle1, velocity1, angle2, velocity2] = state;
+    const { physicsLength1: length1, physicsLength2: length2, mass1, mass2, gravity } = pendulum;
+    const delta = angle1 - angle2;
+    const denominator = 2 * mass1 + mass2 - mass2 * Math.cos(2 * delta);
+    const acceleration1 = (
+      -gravity * (2 * mass1 + mass2) * Math.sin(angle1)
+      - mass2 * gravity * Math.sin(angle1 - 2 * angle2)
+      - 2 * Math.sin(delta) * mass2 * (
+        velocity2 * velocity2 * length2 + velocity1 * velocity1 * length1 * Math.cos(delta)
+      )
+    ) / (length1 * denominator);
+    const acceleration2 = (
+      2 * Math.sin(delta) * (
+        velocity1 * velocity1 * length1 * (mass1 + mass2)
+        + gravity * (mass1 + mass2) * Math.cos(angle1)
+        + velocity2 * velocity2 * length2 * mass2 * Math.cos(delta)
+      )
+    ) / (length2 * denominator);
+    return [velocity1, acceleration1, velocity2, acceleration2];
+  }
+
+  function addScaledState(state, derivative, scale) {
+    return state.map((value, index) => value + derivative[index] * scale);
+  }
+
+  function integratePhysics(step) {
+    const current = [
+      runtime.pendulum.angle1,
+      runtime.pendulum.velocity1,
+      runtime.pendulum.angle2,
+      runtime.pendulum.velocity2
+    ];
+    const parameters = runtime.content.pendulum;
+    const k1 = derivatives(current, parameters);
+    const k2 = derivatives(addScaledState(current, k1, step / 2), parameters);
+    const k3 = derivatives(addScaledState(current, k2, step / 2), parameters);
+    const k4 = derivatives(addScaledState(current, k3, step), parameters);
+    const next = current.map((value, index) => value + step * (
+      k1[index] + 2 * k2[index] + 2 * k3[index] + k4[index]
+    ) / 6);
+    runtime.pendulum.angle1 = next[0];
+    runtime.pendulum.velocity1 = next[1];
+    runtime.pendulum.angle2 = next[2];
+    runtime.pendulum.velocity2 = next[3];
+  }
+
+  function pendulumPoints() {
+    const pendulum = runtime.content.pendulum;
+    const anchor = {
+      x: pendulum.anchor[0] * DESIGN_WIDTH,
+      y: pendulum.anchor[1] * DESIGN_HEIGHT
+    };
+    const joint = {
+      x: anchor.x + pendulum.length1 * Math.sin(runtime.pendulum.angle1),
+      y: anchor.y + pendulum.length1 * Math.cos(runtime.pendulum.angle1)
+    };
+    const end = {
+      x: joint.x + pendulum.length2 * Math.sin(runtime.pendulum.angle2),
+      y: joint.y + pendulum.length2 * Math.cos(runtime.pendulum.angle2)
+    };
+    return { anchor, joint, end };
+  }
+
+  function drawImageNode(context, point, element) {
+    const image = runtime.assets.get(element.assetId);
+    if (!image) return;
+    context.save();
+    context.translate(point.x, point.y);
+    context.rotate(element.rotation || 0);
+    // Generated glass interiors are near-opaque. This backing guarantees that
+    // rods cannot show through the moving bob at any crossing angle.
+    context.fillStyle = runtime.content.colors.background;
+    context.beginPath();
+    context.ellipse(0, 0, element.width * 0.427, element.height * 0.427, 0, 0, Math.PI * 2);
+    context.fill();
+    if (element.shadow !== false) {
+      context.shadowColor = runtime.content.colors.shadow;
+      context.shadowBlur = 12;
+      context.shadowOffsetY = 5;
+    }
+    context.drawImage(image, -element.width / 2, -element.height / 2, element.width, element.height);
+    context.restore();
+  }
+
+  function drawRod(context, from, to, colors, intensity = 1) {
+    if (runtime.content.pendulum.rodStyle === "brass") {
+      const length = Math.hypot(to.x - from.x, to.y - from.y);
+      const nx = -(to.y - from.y) / length, ny = (to.x - from.x) / length;
+      context.save();
+      context.lineCap = "round";
+      for (const [width, color, offset] of [[13, colors.shadow, 1], [9, "#493625", 0], [6, colors.rod, -0.2], [1.35, "#f2d3a0", -2]]) {
+        context.lineWidth = width;
+        context.strokeStyle = color;
+        context.beginPath();
+        context.moveTo(from.x + nx * offset, from.y + ny * offset);
+        context.lineTo(to.x + nx * offset, to.y + ny * offset);
+        context.stroke();
+      }
+      context.restore();
+      return;
+    }
+    const gradient = context.createLinearGradient(from.x, from.y, to.x, to.y);
+    gradient.addColorStop(0, `rgba(105,148,183,${0.3 * intensity})`);
+    gradient.addColorStop(0.52, `rgba(222,236,246,${0.72 * intensity})`);
+    gradient.addColorStop(1, `rgba(133,181,216,${0.42 * intensity})`);
+    context.save();
+    context.globalCompositeOperation = "screen";
+    context.strokeStyle = gradient;
+    context.lineWidth = 1.4;
+    context.shadowColor = "rgba(139,190,225,0.3)";
+    context.shadowBlur = 11;
+    context.beginPath();
+    context.moveTo(from.x, from.y);
+    context.lineTo(to.x, to.y);
+    context.stroke();
+    context.shadowBlur = 0;
+    context.strokeStyle = "rgba(229,240,247,0.15)";
+    context.lineWidth = 0.55;
+    context.beginPath();
+    context.moveTo(from.x + 2, from.y - 1);
+    context.lineTo(to.x + 2, to.y - 1);
+    context.stroke();
+    context.restore();
+    void colors;
+  }
+
+  function drawMetalRing(context, point, element) {
+    const r = element.radius, w = Math.min(element.rimWidth, r * 0.48);
+    const warm = element.material === "champagne";
+    const palette = warm
+      ? ["#fff2d7", "#c8ac7e", "#64543c", "#e5cca1", "#847050"]
+      : ["#f5f9fb", "#acb9c2", "#4a555e", "#d9e2e8", "#75848e"];
+    context.save();
+    context.translate(point.x, point.y);
+    // Open centre: only the annular rim is painted. Light stays in world space.
+    context.beginPath();
+    context.arc(0, 0, r - w / 2, 0, Math.PI * 2);
+    context.lineWidth = w + 1.6;
+    context.strokeStyle = warm ? "#302a20" : "#242e33";
+    context.stroke();
+    const metal = context.createLinearGradient(-r * 0.7, -r, r * 0.8, r);
+    [0, 0.28, 0.52, 0.72, 1].forEach((stop, i) => metal.addColorStop(stop, palette[i]));
+    context.lineWidth = w;
+    context.strokeStyle = metal;
+    context.shadowBlur = r > 8 ? 5 : 3;
+    context.shadowColor = warm ? "rgba(216,186,135,0.22)" : "rgba(198,218,232,0.2)";
+    context.stroke();
+    context.shadowBlur = 0;
+    context.lineWidth = 0.65;
+    context.strokeStyle = warm ? "rgba(255,244,222,0.76)" : "rgba(245,250,255,0.82)";
+    context.beginPath();
+    context.arc(0, 0, r - 0.35, Math.PI * 1.08, Math.PI * 1.78);
+    context.stroke();
+    context.strokeStyle = warm ? "rgba(237,211,165,0.36)" : "rgba(215,231,242,0.4)";
+    context.beginPath();
+    context.arc(0, 0, r - w + 0.25, Math.PI * 0.06, Math.PI * 0.66);
+    context.stroke();
+    context.restore();
+  }
+
+  function drawBoundRod(context, points, fromBinding, toBinding, colors, intensity) {
+    const from = points[fromBinding], to = points[toBinding];
+    const length = Math.hypot(to.x - from.x, to.y - from.y);
+    const ux = (to.x - from.x) / length, uy = (to.y - from.y) / length;
+    const rimRadius = binding => runtime.content.dynamicElements.find(e => e.type === "metalRingNode" && e.binding === binding)?.radius || 0;
+    const a = rimRadius(fromBinding), b = rimRadius(toBinding);
+    // Attach to the rim, without filling the ring hole or changing physics lengths.
+    drawRod(context, { x: from.x + ux * a, y: from.y + uy * a },
+      { x: to.x - ux * b, y: to.y - uy * b }, colors, intensity);
+  }
+
+  function drawGlow(context, x, y, radius, core, halo, strength = 1) {
+    const gradient = context.createRadialGradient(x, y, 0, x, y, radius * 4.6);
+    gradient.addColorStop(0, core);
+    gradient.addColorStop(0.18, core);
+    gradient.addColorStop(0.48, halo);
+    gradient.addColorStop(1, "rgba(0,0,0,0)");
+    context.save();
+    context.globalAlpha = strength;
+    context.fillStyle = gradient;
+    context.beginPath();
+    context.arc(x, y, radius * 4.6, 0, Math.PI * 2);
+    context.fill();
+    context.restore();
+  }
+
+  function drawNewMoon(context, point, radius) {
+    context.save();
+    drawGlow(context, point.x, point.y, radius * 0.72, "rgba(93,137,170,0.16)", "rgba(82,135,178,0.035)", 0.9);
+    const disc = context.createRadialGradient(
+      point.x - radius * 0.2,
+      point.y - radius * 0.25,
+      radius * 0.05,
+      point.x,
+      point.y,
+      radius
+    );
+    disc.addColorStop(0, "rgba(16,28,40,0.96)");
+    disc.addColorStop(0.7, "rgba(4,10,17,0.99)");
+    disc.addColorStop(1, "rgba(1,4,8,1)");
+    context.fillStyle = disc;
+    context.beginPath();
+    context.arc(point.x, point.y, radius, 0, Math.PI * 2);
+    context.fill();
+    context.strokeStyle = "rgba(173,210,236,0.42)";
+    context.lineWidth = 1.15;
+    context.beginPath();
+    context.arc(point.x, point.y, radius + 0.5, -1.28, 1.28);
+    context.stroke();
+    context.restore();
+  }
+
+  function drawCrescentMoon(context, point, radius) {
+    context.save();
+    drawGlow(context, point.x, point.y, radius * 0.9, "rgba(204,228,243,0.42)", "rgba(98,167,215,0.07)", 0.82);
+    context.fillStyle = "rgba(215,231,241,0.82)";
+    context.beginPath();
+    context.arc(point.x, point.y, radius, 0, Math.PI * 2);
+    context.fill();
+    const shadow = context.createRadialGradient(
+      point.x - radius * 0.42,
+      point.y,
+      radius * 0.08,
+      point.x - radius * 0.3,
+      point.y,
+      radius
+    );
+    shadow.addColorStop(0, "rgba(4,9,16,1)");
+    shadow.addColorStop(0.78, "rgba(5,11,18,0.99)");
+    shadow.addColorStop(1, "rgba(13,27,40,0.91)");
+    context.fillStyle = shadow;
+    context.beginPath();
+    context.arc(point.x - radius * 0.3, point.y, radius * 0.98, 0, Math.PI * 2);
+    context.fill();
+    context.strokeStyle = "rgba(214,233,245,0.56)";
+    context.lineWidth = 1;
+    context.beginPath();
+    context.arc(point.x, point.y, radius, -1.18, 1.18);
+    context.stroke();
+    context.restore();
+  }
+
+  function craterPattern(element) {
+    if (runtime.nodeTextures.has(element.id)) return runtime.nodeTextures.get(element.id);
+    const random = seededRandom(element.surfaceSeed || 1);
+    const craters = Array.from({ length: 28 }, () => ({
+      x: random() * 0.82 - 0.04,
+      y: random() * 1.56 - 0.78,
+      radius: 0.018 + random() * 0.065,
+      alpha: 0.08 + random() * 0.18
+    }));
+    runtime.nodeTextures.set(element.id, craters);
+    return craters;
+  }
+
+  function drawQuarterMoon(context, point, element, visualTime) {
+    const radius = element.radius;
+    context.save();
+    drawGlow(context, point.x, point.y, radius * 0.83, "rgba(222,237,247,0.35)", "rgba(105,170,216,0.075)", 0.95);
+    context.beginPath();
+    context.arc(point.x, point.y, radius, 0, Math.PI * 2);
+    context.clip();
+
+    const surface = context.createRadialGradient(
+      point.x + radius * 0.38,
+      point.y - radius * 0.38,
+      radius * 0.03,
+      point.x,
+      point.y,
+      radius * 1.2
+    );
+    surface.addColorStop(0, "#f0f5f7");
+    surface.addColorStop(0.42, "#c7d4dc");
+    surface.addColorStop(0.78, "#8197a8");
+    surface.addColorStop(1, "#425466");
+    context.fillStyle = surface;
+    context.fillRect(point.x - radius, point.y - radius, radius * 2, radius * 2);
+
+    for (const crater of craterPattern(element)) {
+      const x = point.x + crater.x * radius;
+      const y = point.y + crater.y * radius;
+      const craterRadius = crater.radius * radius;
+      const gradient = context.createRadialGradient(
+        x - craterRadius * 0.3,
+        y - craterRadius * 0.3,
+        0,
+        x,
+        y,
+        craterRadius
+      );
+      gradient.addColorStop(0, `rgba(238,245,248,${crater.alpha * 0.48})`);
+      gradient.addColorStop(0.52, `rgba(82,103,119,${crater.alpha})`);
+      gradient.addColorStop(1, "rgba(28,42,54,0)");
+      context.fillStyle = gradient;
+      context.beginPath();
+      context.arc(x, y, craterRadius, 0, Math.PI * 2);
+      context.fill();
+    }
+
+    const boundaryDrift = Math.sin(visualTime * 0.00022) * radius * 0.012;
+    const shadow = context.createLinearGradient(point.x - radius, 0, point.x + radius, 0);
+    shadow.addColorStop(0, "rgba(1,4,8,0.995)");
+    shadow.addColorStop(0.47, "rgba(3,8,14,0.99)");
+    shadow.addColorStop(0.498, "rgba(21,38,52,0.8)");
+    shadow.addColorStop(0.515, "rgba(0,0,0,0.06)");
+    shadow.addColorStop(1, "rgba(0,0,0,0)");
+    context.save();
+    context.translate(boundaryDrift, 0);
+    context.fillStyle = shadow;
+    context.fillRect(point.x - radius, point.y - radius, radius * 2, radius * 2);
+    context.restore();
+    context.restore();
+
+    context.save();
+    context.strokeStyle = "rgba(221,238,248,0.78)";
+    context.lineWidth = 1.15;
+    context.beginPath();
+    context.arc(point.x, point.y, radius, -1.5, 1.5);
+    context.stroke();
+    context.strokeStyle = "rgba(97,145,180,0.26)";
+    context.beginPath();
+    context.arc(point.x, point.y, radius, 1.5, 4.78);
+    context.stroke();
+    context.restore();
+
+    const pulse = (Math.sin(visualTime * 0.00062) + 1) * 0.5;
+    if (pulse > 0.94) {
+      const progress = (pulse - 0.94) / 0.06;
+      context.save();
+      context.strokeStyle = `rgba(159,205,235,${(1 - progress) * 0.13})`;
+      context.lineWidth = 0.8;
+      context.beginPath();
+      context.arc(point.x, point.y, 90 + progress * 50, 0, Math.PI * 2);
+      context.stroke();
+      context.restore();
+    }
+  }
+
+  function drawSimpleMoon(context, point, element, colors) {
+    const radius = element.radius;
+    context.save();
+    drawGlow(context, point.x, point.y, radius * 0.8, `${colors.ink}55`, `${colors.accent}12`, 0.85);
+    context.fillStyle = element.phase === "new" ? colors.surface : colors.ink;
+    context.beginPath();
+    context.arc(point.x, point.y, radius, 0, Math.PI * 2);
+    context.fill();
+    context.restore();
+  }
+
+  function drawPhaseNode(context, point, element, colors, visualTime) {
+    if (element.phase === "new") drawNewMoon(context, point, element.radius);
+    else if (element.phase === "crescent") drawCrescentMoon(context, point, element.radius);
+    else if (element.phase === "firstQuarter") drawQuarterMoon(context, point, element, visualTime);
+    else drawSimpleMoon(context, point, element, colors);
+  }
+
+  function drawTrail(context, colors, now) {
+    const trailConfig = runtime.content.pendulum.trail;
+    if (!trailConfig.enabled || runtime.pendulum.trail.length < 2) return;
+    runtime.pendulum.trail = runtime.pendulum.trail.filter((point) => now - point.at <= trailConfig.lifetimeMs);
+    const points = runtime.pendulum.trail;
+    context.save();
+    context.globalCompositeOperation = "screen";
+    context.strokeStyle = colors.trail;
+    context.lineWidth = trailConfig.width;
+    for (let index = 1; index < points.length; index += 1) {
+      const age = (now - points[index].at) / Math.max(1, trailConfig.lifetimeMs);
+      context.globalAlpha = Math.max(0, trailConfig.alpha * (1 - age));
+      context.beginPath();
+      context.moveTo(points[index - 1].x, points[index - 1].y);
+      context.lineTo(points[index].x, points[index].y);
+      context.stroke();
+    }
+    context.restore();
+  }
+
+  function drawDynamicScene(now) {
+    const content = runtime.content;
+    const context = dynamicContext;
+    const points = pendulumPoints();
+    const trailConfig = content.pendulum.trail;
+    const visualTime = now - runtime.startedAt;
+    if (trailConfig.enabled) {
+      runtime.pendulum.trail.push({ x: points.end.x, y: points.end.y, at: now });
+      if (runtime.pendulum.trail.length > trailConfig.maxPoints) runtime.pendulum.trail.shift();
+    }
+
+    context.setTransform(DPR, 0, 0, DPR, 0, 0);
+    context.clearRect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+    content.dynamicElements
+      .filter((element) => element.type === "movingLunarDust")
+      .forEach((element) => drawLunarDust(context, element, visualTime));
+    content.dynamicElements
+      .filter((element) => element.type === "movingStarField")
+      .forEach((element) => drawStarField(context, element, visualTime));
+    drawTrail(context, content.colors, now);
+    drawBoundRod(context, points, "anchor", "joint", content.colors, 0.9);
+    drawBoundRod(context, points, "joint", "end", content.colors, 1);
+
+    const binding = {
+      anchor: points.anchor,
+      joint: points.joint,
+      end: points.end
+    };
+    // Stable front-view layering: moving end bob occludes the fixed anchor.
+    for (const nodeBinding of ["anchor", "joint", "end"]) {
+      for (const element of content.dynamicElements.filter(e => e.binding === nodeBinding)) {
+        if (element.type === "phaseNode") drawPhaseNode(context, binding[nodeBinding], element, content.colors, visualTime);
+        if (element.type === "imageNode") drawImageNode(context, binding[nodeBinding], element);
+        if (element.type === "metalRingNode") drawMetalRing(context, binding[nodeBinding], element);
+      }
+    }
+  }
+
+  function formatClock(now, timezone) {
+    const parts = Object.fromEntries(new Intl.DateTimeFormat("zh-CN", {
+      timeZone: timezone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      weekday: "long",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false
+    }).formatToParts(now).map((part) => [part.type, part.value]));
+    return {
+      hourMinute: `${parts.hour}:${parts.minute}`,
+      seconds: parts.second,
+      date: `${parts.year}.${parts.month}.${parts.day} ${parts.weekday}`
+    };
+  }
+
+  function updateClock(now) {
+    const second = Math.floor(now.getTime() / 1000);
+    if (second === runtime.lastClockSecond || !runtime.content) return;
+    runtime.lastClockSecond = second;
+    const timezone = runtime.content.environment.timezone;
+    const formatted = formatClock(now, timezone);
+    dom.clockHm.textContent = formatted.hourMinute;
+    dom.clockSeconds.textContent = formatted.seconds;
+    dom.clockTime.dateTime = now.toISOString();
+    dom.clockDate.textContent = formatted.date;
+    const dateParts = new Intl.DateTimeFormat("en-CA", {timeZone:timezone,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(now);
+    const values = Object.fromEntries(dateParts.map(x=>[x.type,x.value]));
+    const dateKey = values.year + "-" + values.month + "-" + values.day;
+    const day = Math.floor((Date.UTC(+values.year,+values.month-1,+values.day)-Date.parse(runtime.content.brandText.foundedDate+"T00:00:00Z"))/86400000)+1;
+    dom.companyDay.textContent = String(day).padStart(4, "0");
+    try {
+      const lunar = new Intl.DateTimeFormat("zh-CN-u-ca-chinese", {timeZone:timezone,month:"long",day:"numeric"}).format(now);
+      dom.lunarDataLabel.textContent = dateKey === runtime.content.date ? runtime.content.environment.lunarDataLabel : "农历 " + lunar;
+    } catch {}
+    if (runtime.preview && params.get("previewDate") === runtime.content.date) {
+      dom.clockDate.textContent = new Intl.DateTimeFormat("zh-CN", { timeZone:timezone,year:"numeric",month:"2-digit",day:"2-digit",weekday:"long" }).format(new Date(runtime.content.date+"T12:00:00+08:00")).replaceAll("/",".");
+      dom.companyDay.textContent = String(runtime.content.brandText.companyDay).padStart(4,"0");
+      dom.lunarDataLabel.textContent = runtime.content.environment.lunarDataLabel;
+    }
+  }
+
+  function minutesInTimezone(now, timezone) {
+    const parts = Object.fromEntries(new Intl.DateTimeFormat("en-GB", {
+      timeZone: timezone,
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    }).formatToParts(now).map((part) => [part.type, part.value]));
+    return Number(parts.hour) * 60 + Number(parts.minute);
+  }
+
+  function parseClock(value) {
+    const [hours, minutes] = value.split(":").map(Number);
+    return hours * 60 + minutes;
+  }
+
+  function isInsidePlaybackWindow(now) {
+    if (runtime.preview) return true;
+    const environment = runtime.content.environment;
+    const minutes = minutesInTimezone(now, environment.timezone);
+    return minutes >= parseClock(environment.playbackWindow.start)
+      && minutes < parseClock(environment.playbackWindow.end);
+  }
+
+  function stopAnimation() {
+    if (runtime.frameId !== null) {
+      cancelAnimationFrame(runtime.frameId);
+      runtime.frameId = null;
+    }
+    runtime.lastFrameAt = 0;
+    runtime.accumulator = 0;
+    lastPhysicsAt = 0;
+  }
+
+  function scheduleActivityCheck() {
+    window.clearTimeout(runtime.activityTimer);
+    runtime.activityTimer = window.setTimeout(checkPlaybackState, 30_000);
+  }
+
+  function checkPlaybackState() {
+    if (!runtime.content) return;
+    const active = !qaPaused && !document.hidden && isInsidePlaybackWindow(new Date());
+    renderer.classList.toggle("is-blackout", !runtime.preview && !isInsidePlaybackWindow(new Date()));
+    if (active) queueFrame();
+    else stopAnimation();
+    scheduleActivityCheck();
+  }
+
+  function renderDynamicFrame(timestamp) {
+    runtime.frameId = null;
+    if (!runtime.content || qaPaused || document.hidden || !isInsidePlaybackWindow(new Date())) {
+      stopAnimation();
+      return;
+    }
+
+    const fps = clamp(runtime.content.pendulum.fps || DEFAULT_FPS, 1, MAX_FPS);
+    const frameInterval = 1000 / fps;
+    if (runtime.lastFrameAt === 0) runtime.lastFrameAt = timestamp;
+    const elapsed = timestamp - runtime.lastFrameAt;
+    if (lastPhysicsAt === 0) lastPhysicsAt = timestamp;
+    if (elapsed >= frameInterval) {
+      const paintStarted = performance.now();
+      const seconds = Math.min(timestamp - lastPhysicsAt, 100) / 1000;
+      lastPhysicsAt = timestamp;
+      const physicsHz = clamp(runtime.content.pendulum.physicsHz, 30, MAX_PHYSICS_HZ);
+      const physicsStep = 1 / physicsHz;
+      runtime.accumulator += seconds * runtime.content.pendulum.timeScale;
+      let physicsSteps = 0;
+      while (runtime.accumulator >= physicsStep && physicsSteps < 12) {
+        integratePhysics(physicsStep);
+        runtime.accumulator -= physicsStep;
+        physicsSteps += 1;
+        qaMetrics.physicsSteps += 1;
+        qaMetrics.simulatedSeconds += physicsStep;
+      }
+      runtime.lastFrameAt = timestamp - (elapsed % frameInterval);
+      drawDynamicScene(timestamp);
+      qaMetrics.frames += 1;
+      qaMetrics.maximumPaintMs = Math.max(qaMetrics.maximumPaintMs, performance.now()-paintStarted);
+      updateClock(new Date());
+      if (Date.now() >= runtime.nextWeatherAt) void refreshWeather();
+    }
+    queueFrame();
+  }
+
+  async function loadContent() {
+    stopAnimation();
+    renderer.dataset.status = "loading";
+    dom.errorState.textContent = "";
+    let content;
+    let source;
+    let assets;
+    try {
+      source = safeContentPath();
+      content = EMBEDDED_CONTENT ? JSON.parse(EMBEDDED_CONTENT.textContent) : await fetchJson(source);
+      assertRuntimeContract(content);
+      assets = await loadAssets(content);
+    } catch (primaryError) {
+      source = FALLBACK_CONTENT_PATH;
+      content = await fetchJson(source);
+      assertRuntimeContract(content);
+      assets = await loadAssets(content);
+      dom.errorState.textContent = "内容离线 · 使用本地回退";
+      console.warn(primaryError);
+    }
+
+    runtime.content = content;
+    runtime.assets = assets;
+    runtime.source = source;
+    renderer.dataset.contentSource = source;
+    applyPalette(content);
+    applyTextContent(content);
+    resetPhysics(content);
+    setEnvironmentValues(content.environment.fallback, "快照 " + (content.environment.fallbackObservedAt?.slice(5,16).replace("T"," ") || "--"));
+    runtime.nextWeatherAt = 0;
+    resizeStage();
+    drawDynamicScene(performance.now());
+    updateClock(new Date());
+    renderer.dataset.status = "ready";
+    if (qaEnabled) {
+      window.__displayQA = {
+        state: () => ({ points:pendulumPoints(), metrics:{...qaMetrics}, state:{...runtime.pendulum,trail:runtime.pendulum.trail.length}, ready:renderer.dataset.status, framePending:runtime.frameId!==null, hidden:document.hidden }),
+        pause: () => {qaPaused=true;stopAnimation();},
+        resume: () => {qaPaused=false;checkPlaybackState();},
+        sample: seconds => {
+          qaPaused=true; stopAnimation(); resetPhysics(runtime.content);
+          const steps=Math.round(Math.max(0,Math.min(3600,seconds))*runtime.content.pendulum.timeScale*runtime.content.pendulum.physicsHz);
+          for(let n=0;n<steps;n++) integratePhysics(1/runtime.content.pendulum.physicsHz);
+          drawDynamicScene(performance.now());return window.__displayQA.state();
+        },
+        audit: seconds => {
+          qaPaused=true;stopAnimation();resetPhysics(runtime.content);
+          const nodes=runtime.content.dynamicElements.filter(x=>x.binding);
+          const boxes=[...document.querySelectorAll(".brand,.phase,.science-note,.environment,.clock")].map(e=>({name:e.className,left:e.offsetLeft,top:e.offsetTop,right:e.offsetLeft+e.offsetWidth,bottom:e.offsetTop+e.offsetHeight}));
+          const steps=Math.round(Math.max(0,Math.min(3600,seconds))*runtime.content.pendulum.timeScale*runtime.content.pendulum.physicsHz);
+          let collisions=0,clipped=0,samples=0;const envelope={minX:Infinity,minY:Infinity,maxX:-Infinity,maxY:-Infinity};const conflictExamples=[];
+          for(let n=0;n<steps;n++){
+            integratePhysics(1/runtime.content.pendulum.physicsHz);
+            if(n%4)continue;samples++;
+            const p=pendulumPoints();
+            for(const node of nodes){
+              const point=p[node.binding], rx=node.width?node.width*.48:node.radius+5,ry=node.height?node.height*.48:node.radius+5;
+              const b={left:point.x-rx,top:point.y-ry,right:point.x+rx,bottom:point.y+ry};
+              envelope.minX=Math.min(envelope.minX,b.left);envelope.minY=Math.min(envelope.minY,b.top);envelope.maxX=Math.max(envelope.maxX,b.right);envelope.maxY=Math.max(envelope.maxY,b.bottom);
+              if(b.left<0||b.top<0||b.right>1280||b.bottom>960)clipped++;
+              for(const box of boxes){if(b.left<box.right&&b.right>box.left&&b.top<box.bottom&&b.bottom>box.top){
+                collisions++;if(conflictExamples.length<5)conflictExamples.push({t:n/runtime.content.pendulum.physicsHz/runtime.content.pendulum.timeScale,node:node.id,box:box.name});
+              }}
+            }
+          }
+          drawDynamicScene(performance.now());
+          return {seconds,samples,collisions,clipped,envelope,conflictExamples,finite:[runtime.pendulum.angle1,runtime.pendulum.angle2,runtime.pendulum.velocity1,runtime.pendulum.velocity2].every(Number.isFinite)};
+        }
+      };
+    }
+    void refreshWeather();
+    checkPlaybackState();
+  }
+
+  window.addEventListener("resize", resizeStage, { passive: true });
+  document.addEventListener("visibilitychange", checkPlaybackState);
+  window.addEventListener("renderer:reload", () => void loadContent());
+  window.addEventListener("beforeunload", stopAnimation);
+
+  void loadContent().catch((error) => {
+    renderer.dataset.status = "error";
+    dom.errorState.textContent = "固定渲染器启动失败";
+    console.error(error);
+    stopAnimation();
+  });
+})();
+</script>
+  </body>
+</html>
