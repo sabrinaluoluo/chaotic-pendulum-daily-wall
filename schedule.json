@@ -47,11 +47,16 @@
       "date": "2026-10-19",
       "versionPath": "/versions/2026-10-19-light-at-the-pen.html",
       "updatedAt": "2026-10-15T03:07:38.953Z"
+    },
+    {
+      "date": "2026-10-20",
+      "versionPath": "/versions/2026-10-20-ferret-clock-shop-r1.html",
+      "updatedAt": "2026-10-15T03:37:28.627Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-10-15T03:07:38.953Z",
+  "updatedAt": "2026-10-15T03:37:28.627Z",
   "refreshSeconds": 300
 }
