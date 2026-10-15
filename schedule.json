@@ -42,11 +42,16 @@
       "date": "2026-10-16",
       "versionPath": "/versions/2026-10-16-a-world-in-one-grain.html",
       "updatedAt": "2026-10-13T02:07:46.645Z"
+    },
+    {
+      "date": "2026-10-19",
+      "versionPath": "/versions/2026-10-19-light-at-the-pen.html",
+      "updatedAt": "2026-10-15T03:07:38.953Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-10-13T02:07:46.645Z",
+  "updatedAt": "2026-10-15T03:07:38.953Z",
   "refreshSeconds": 300
 }
