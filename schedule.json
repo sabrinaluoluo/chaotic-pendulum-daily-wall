@@ -92,11 +92,16 @@
       "date": "2026-10-29",
       "versionPath": "/versions/2026-10-29-otter-laundromat.html",
       "updatedAt": "2026-10-26T07:27:52.190Z"
+    },
+    {
+      "date": "2026-10-30",
+      "versionPath": "/versions/2026-10-30-day-two-hundred.html",
+      "updatedAt": "2026-10-26T07:54:39.117Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-10-26T07:27:52.190Z",
+  "updatedAt": "2026-10-26T07:54:39.117Z",
   "refreshSeconds": 300
 }
