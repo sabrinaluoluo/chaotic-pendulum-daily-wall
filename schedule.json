@@ -97,11 +97,16 @@
       "date": "2026-10-30",
       "versionPath": "/versions/2026-10-30-day-two-hundred.html",
       "updatedAt": "2026-10-26T07:54:39.117Z"
+    },
+    {
+      "date": "2026-11-03",
+      "versionPath": "/versions/2026-11-03-the-first-step-of-long-march-five.html",
+      "updatedAt": "2026-11-02T12:17:29.212Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-10-26T07:54:39.117Z",
+  "updatedAt": "2026-11-02T12:17:29.212Z",
   "refreshSeconds": 300
 }
