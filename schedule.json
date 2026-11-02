@@ -102,11 +102,16 @@
       "date": "2026-11-03",
       "versionPath": "/versions/2026-11-03-the-first-step-of-long-march-five.html",
       "updatedAt": "2026-11-02T12:17:29.212Z"
+    },
+    {
+      "date": "2026-11-04",
+      "versionPath": "/versions/2026-11-04-paper-boat-arrives.html",
+      "updatedAt": "2026-11-02T13:00:58.678Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-11-02T12:17:29.212Z",
+  "updatedAt": "2026-11-02T13:00:58.678Z",
   "refreshSeconds": 300
 }
