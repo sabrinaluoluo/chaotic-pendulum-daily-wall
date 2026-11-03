@@ -107,11 +107,16 @@
       "date": "2026-11-04",
       "versionPath": "/versions/2026-11-04-paper-boat-arrives.html",
       "updatedAt": "2026-11-02T13:00:58.678Z"
+    },
+    {
+      "date": "2026-11-05",
+      "versionPath": "/versions/2026-11-05-unboxing-the-world.html",
+      "updatedAt": "2026-11-03T02:37:26.012Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-11-02T13:00:58.678Z",
+  "updatedAt": "2026-11-03T02:37:26.012Z",
   "refreshSeconds": 300
 }
