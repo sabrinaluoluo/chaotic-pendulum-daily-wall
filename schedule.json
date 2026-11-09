@@ -167,11 +167,36 @@
       "date": "2026-11-20",
       "versionPath": "/versions/2026-11-20-a-city-for-childhood.html",
       "updatedAt": "2026-11-09T03:38:38.842Z"
+    },
+    {
+      "date": "2026-11-23",
+      "versionPath": "/versions/2026-11-23-water-lantern-wishes.html",
+      "updatedAt": "2026-11-09T07:08:20.979Z"
+    },
+    {
+      "date": "2026-11-24",
+      "versionPath": "/versions/2026-11-24-the-weight-of-stillness.html",
+      "updatedAt": "2026-11-09T07:08:20.979Z"
+    },
+    {
+      "date": "2026-11-25",
+      "versionPath": "/versions/2026-11-25-orange-means-safety.html",
+      "updatedAt": "2026-11-09T07:08:20.979Z"
+    },
+    {
+      "date": "2026-11-26",
+      "versionPath": "/versions/2026-11-26-quiet-shelter.html",
+      "updatedAt": "2026-11-09T07:08:20.979Z"
+    },
+    {
+      "date": "2026-11-27",
+      "versionPath": "/versions/2026-11-27-the-lamp-before-dawn.html",
+      "updatedAt": "2026-11-09T07:08:20.979Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-11-09T03:38:38.842Z",
+  "updatedAt": "2026-11-09T07:08:20.979Z",
   "refreshSeconds": 300
 }
