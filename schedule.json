@@ -142,11 +142,36 @@
       "date": "2026-11-13",
       "versionPath": "/versions/2026-11-13-capybaras-weekend-bath.html",
       "updatedAt": "2026-11-09T02:00:21.496Z"
+    },
+    {
+      "date": "2026-11-16",
+      "versionPath": "/versions/2026-11-16-the-first-championship-spike.html",
+      "updatedAt": "2026-11-09T03:38:38.842Z"
+    },
+    {
+      "date": "2026-11-17",
+      "versionPath": "/versions/2026-11-17-raccoons-snack-vault.html",
+      "updatedAt": "2026-11-09T03:38:38.842Z"
+    },
+    {
+      "date": "2026-11-18",
+      "versionPath": "/versions/2026-11-18-where-the-bay-welcomes-the-world.html",
+      "updatedAt": "2026-11-09T03:38:38.842Z"
+    },
+    {
+      "date": "2026-11-19",
+      "versionPath": "/versions/2026-11-19-a-robot-waits-for-a-flower.html",
+      "updatedAt": "2026-11-09T03:38:38.842Z"
+    },
+    {
+      "date": "2026-11-20",
+      "versionPath": "/versions/2026-11-20-a-city-for-childhood.html",
+      "updatedAt": "2026-11-09T03:38:38.842Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-11-09T02:31:05.368Z",
+  "updatedAt": "2026-11-09T03:38:38.842Z",
   "refreshSeconds": 300
 }
