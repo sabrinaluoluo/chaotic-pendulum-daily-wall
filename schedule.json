@@ -117,11 +117,26 @@
       "date": "2026-11-06",
       "versionPath": "/versions/2026-11-06-fridays-paper-plane.html",
       "updatedAt": "2026-11-03T08:20:29.672Z"
+    },
+    {
+      "date": "2026-11-09",
+      "versionPath": "/versions/2026-11-09-lights-we-keep-safe.html",
+      "updatedAt": "2026-11-09T02:00:21.496Z"
+    },
+    {
+      "date": "2026-11-12",
+      "versionPath": "/versions/2026-11-12-morning-light-in-cuiheng.html",
+      "updatedAt": "2026-11-09T02:00:21.496Z"
+    },
+    {
+      "date": "2026-11-13",
+      "versionPath": "/versions/2026-11-13-capybaras-weekend-bath.html",
+      "updatedAt": "2026-11-09T02:00:21.496Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-11-03T08:20:29.672Z",
+  "updatedAt": "2026-11-09T02:00:21.496Z",
   "refreshSeconds": 300
 }
