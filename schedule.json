@@ -269,6 +269,11 @@
       "updatedAt": "2026-11-10T07:34:56.858Z"
     },
     {
+      "date": "2026-12-18",
+      "versionPath": "/versions/2026-12-18-a-place-for-the-traveller.html",
+      "updatedAt": "2026-11-10T08:50:33.937Z"
+    },
+    {
       "date": "2026-12-19",
       "versionPath": "/versions/2026-12-19-day-250-every-step-counts.html",
       "updatedAt": "2026-11-10T07:34:56.858Z"
@@ -277,6 +282,6 @@
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-11-10T07:34:56.858Z",
+  "updatedAt": "2026-11-10T08:50:33.937Z",
   "refreshSeconds": 300
 }
