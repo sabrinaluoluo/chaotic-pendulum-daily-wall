@@ -222,11 +222,36 @@
       "date": "2026-12-05",
       "versionPath": "/versions/2026-12-05-water-lilies-and-light.html",
       "updatedAt": "2026-11-10T02:17:52.505Z"
+    },
+    {
+      "date": "2026-12-07",
+      "versionPath": "/versions/2026-12-07-pinecone-keeps-winter.html",
+      "updatedAt": "2026-11-10T04:36:03.385Z"
+    },
+    {
+      "date": "2026-12-08",
+      "versionPath": "/versions/2026-12-08-tomorrow-on-the-schooldesk.html",
+      "updatedAt": "2026-11-10T04:36:03.385Z"
+    },
+    {
+      "date": "2026-12-09",
+      "versionPath": "/versions/2026-12-09-awakening-on-the-page.html",
+      "updatedAt": "2026-11-10T04:36:03.385Z"
+    },
+    {
+      "date": "2026-12-10",
+      "versionPath": "/versions/2026-12-10-dignity-in-everyday-life.html",
+      "updatedAt": "2026-11-10T04:36:03.385Z"
+    },
+    {
+      "date": "2026-12-11",
+      "versionPath": "/versions/2026-12-11-one-crate-connects-the-world.html",
+      "updatedAt": "2026-11-10T04:36:03.385Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-11-10T02:17:52.505Z",
+  "updatedAt": "2026-11-10T04:36:03.385Z",
   "refreshSeconds": 300
 }
