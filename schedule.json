@@ -247,11 +247,36 @@
       "date": "2026-12-11",
       "versionPath": "/versions/2026-12-11-one-crate-connects-the-world.html",
       "updatedAt": "2026-11-10T04:36:03.385Z"
+    },
+    {
+      "date": "2026-12-14",
+      "versionPath": "/versions/2026-12-14-a-meteor-in-the-winter-night.html",
+      "updatedAt": "2026-11-10T07:34:56.858Z"
+    },
+    {
+      "date": "2026-12-15",
+      "versionPath": "/versions/2026-12-15-a-glimmer-in-dark-grey.html",
+      "updatedAt": "2026-11-10T07:34:56.858Z"
+    },
+    {
+      "date": "2026-12-16",
+      "versionPath": "/versions/2026-12-16-inkstone-and-bamboo.html",
+      "updatedAt": "2026-11-10T07:34:56.858Z"
+    },
+    {
+      "date": "2026-12-17",
+      "versionPath": "/versions/2026-12-17-a-snail-wants-to-fly.html",
+      "updatedAt": "2026-11-10T07:34:56.858Z"
+    },
+    {
+      "date": "2026-12-19",
+      "versionPath": "/versions/2026-12-19-day-250-every-step-counts.html",
+      "updatedAt": "2026-11-10T07:34:56.858Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-11-10T04:36:03.385Z",
+  "updatedAt": "2026-11-10T07:34:56.858Z",
   "refreshSeconds": 300
 }
