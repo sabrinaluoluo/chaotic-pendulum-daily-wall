@@ -277,11 +277,36 @@
       "date": "2026-12-19",
       "versionPath": "/versions/2026-12-19-day-250-every-step-counts.html",
       "updatedAt": "2026-11-10T07:34:56.858Z"
+    },
+    {
+      "date": "2026-12-21",
+      "versionPath": "/versions/2026-12-21-every-pass-connects-us.html",
+      "updatedAt": "2026-11-13T03:56:18.150Z"
+    },
+    {
+      "date": "2026-12-22",
+      "versionPath": "/versions/2026-12-22-solstice-warmth-in-a-pot.html",
+      "updatedAt": "2026-11-13T03:56:18.150Z"
+    },
+    {
+      "date": "2026-12-23",
+      "versionPath": "/versions/2026-12-23-a-penguins-tangerine-delivery.html",
+      "updatedAt": "2026-11-13T03:56:18.150Z"
+    },
+    {
+      "date": "2026-12-24",
+      "versionPath": "/versions/2026-12-24-a-warm-letter-on-christmas-eve.html",
+      "updatedAt": "2026-11-13T03:56:18.150Z"
+    },
+    {
+      "date": "2026-12-25",
+      "versionPath": "/versions/2026-12-25-christmas-gifts-on-the-way.html",
+      "updatedAt": "2026-11-13T03:56:18.150Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-11-10T08:50:33.937Z",
+  "updatedAt": "2026-11-13T03:56:18.150Z",
   "refreshSeconds": 300
 }
