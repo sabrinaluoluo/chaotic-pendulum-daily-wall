@@ -302,11 +302,36 @@
       "date": "2026-12-25",
       "versionPath": "/versions/2026-12-25-christmas-gifts-on-the-way.html",
       "updatedAt": "2026-11-13T03:56:18.150Z"
+    },
+    {
+      "date": "2026-12-28",
+      "versionPath": "/versions/2026-12-28-a-cats-rubber-stamp-studio.html",
+      "updatedAt": "2026-11-13T07:09:37.323Z"
+    },
+    {
+      "date": "2026-12-29",
+      "versionPath": "/versions/2026-12-29-a-hedgehogs-button-planet.html",
+      "updatedAt": "2026-11-13T07:09:37.323Z"
+    },
+    {
+      "date": "2026-12-30",
+      "versionPath": "/versions/2026-12-30-a-capybaras-projection-room.html",
+      "updatedAt": "2026-11-13T07:09:37.323Z"
+    },
+    {
+      "date": "2026-12-31",
+      "versionPath": "/versions/2026-12-31-turn-a-page-for-time.html",
+      "updatedAt": "2026-11-13T07:09:37.323Z"
+    },
+    {
+      "date": "2027-01-01",
+      "versionPath": "/versions/2027-01-01-hello-2027-one-step-forward.html",
+      "updatedAt": "2026-11-13T07:09:37.323Z"
     }
   ],
   "fallbackPath": "/versions/default.html",
   "reviewMode": "manual",
   "reviewUntil": "2026-09-01T23:59:59+08:00",
-  "updatedAt": "2026-11-13T03:56:18.150Z",
+  "updatedAt": "2026-11-13T07:09:37.323Z",
   "refreshSeconds": 300
 }
